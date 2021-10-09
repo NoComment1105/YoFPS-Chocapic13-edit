@@ -1,0 +1,21 @@
+screen.C=§cYoFPS §bShaders
+screen.S=Settings
+screen.S.comment=Manage visual settings
+screen.WAVING=Waving Objects
+screen.WAVING.comment=Toggle waving plants, flowers etc.
+screen.EFFECTS=Effects
+screen.EFFECTS.comment=Toggle effects like Lens Flares
+
+option.RAIN_DROPS=Rain Drops
+option.RAIN_DROPS.comment=Turn on/off rain drops on camera
+
+option.WAVING_FIRE=Waving Fire
+option.WAVING_WATER=3D Waves
+option.WAVING_GRASS=Waving Grass
+option.WAVING_WHEAT=Waving Wheat
+option.WAVING_FLOWERS=Waving Flowers
+option.WAVING_VINES=Waving Vines
+
+
+
+
