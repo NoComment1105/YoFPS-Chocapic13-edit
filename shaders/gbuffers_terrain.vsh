@@ -11,31 +11,33 @@ Read the terms of modification and sharing before changing something below pleas
 //////////////////////////////ADJUSTABLE VARIABLES
 //////////////////////////////ADJUSTABLE VARIABLES
 
-#define WAVING_LEAVES
-#define WAVING_VINES
 #define WAVING_GRASS
-#define WAVING_WHEAT
 #define WAVING_FLOWERS
+#define WAVING_LEAVES
+#define WAVING_FUNGI
+#define WAVING_VINES
 #define WAVING_FIRE
-#define WAVING_LAVA
-#define WAVING_LILYPAD
 
-#define ENTITY_LEAVES        18.0
-#define ENTITY_VINES        106.0
-#define ENTITY_TALLGRASS     31.0
-#define ENTITY_DANDELION     37.0
-#define ENTITY_ROSE          38.0
-#define ENTITY_WHEAT         59.0
-#define ENTITY_LILYPAD      111.0
-#define ENTITY_FIRE          51.0
-#define ENTITY_LAVAFLOWING   10.0
-#define ENTITY_LAVASTILL     11.0
+
+float GRASS_WAVE_SPEED = 1.2; // DEFAULT: 1.2
+float FLOWERS_WAVE_SPEED = 0.9; // DEFAULT: 0.9
+float LEAVES_WAVE_SPEED = 0.75;  // DEFAULT: 0.75
+float FUNGI_WAVE_SPEED = 0.7; // DEFAULT: 0.7
+float VINES_WAVE_SPEED = 0.75; // DEFAULT: 0.75 (I reccomend this is the same as leaves, or there is <0.2 difference in value)
+float FIRE_WAVE_SPEED = 1.1; // DEFAULT: 1.0
 
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 
-const float PI = 3.1415927;
+#define ENTITY_GRASS		 1.0  // Includes short and tall grass, fern and nether roots
+#define ENTITY_FLOWERS		 2.0  // All flowers in minecraft
+#define ENTITY_LEAVES        3.0  // Includes all leaves (excludes wart blocks for nether trees)
+#define ENTITY_FUNGI		 4.0  // MUSHROOMS (including nether ones)
+#define ENTITY_VINES         5.0  // All vines + nether ones.
+#define ENTITY_FIRE          6.0  // Fire
+
+const float PI = 3.141592654;
 
 varying vec4 color;
 varying vec2 lmcoord;
@@ -155,46 +157,46 @@ void main() {
 	ampl1 = vec3(0.0);
 	ampl2 = vec3(0.0);
 	*/
+
+	//////////////////// WAVING OBJECTS ////////////////////
+	//////////////////// WAVING OBJECTS ////////////////////
+	//////////////////// WAVING OBJECTS ////////////////////
+
 	#ifdef WAVING_LEAVES
 	if ( mc_Entity.x == ENTITY_LEAVES )
-			position.xyz += calcMove(worldpos.xyz, 0.0040, 0.0064, 0.0043, 0.0035, 0.0037, 0.0041, vec3(1.0,0.2,1.0), vec3(0.5,0.1,0.5));
+			position.xyz += calcMove(worldpos.xyz, 0.0040, 0.0064, 0.0043, 0.0035, 0.0037, 0.0041, vec3(0.9,0.15,0.9), vec3(0.4,0.05,0.4)) * LEAVES_WAVE_SPEED;
 	#endif
 	#ifdef WAVING_VINES
 	if ( mc_Entity.x == ENTITY_VINES )
-			position.xyz += calcMove(worldpos.xyz, 0.0040, 0.0064, 0.0043, 0.0035, 0.0037, 0.0041, vec3(1.0,0.2,1.0), vec3(0.5,0.1,0.5));
+			position.xyz += calcMove(worldpos.xyz, 0.0040, 0.0064, 0.0043, 0.0035, 0.0037, 0.0041, vec3(0.9,0.15,0.9), vec3(0.4,0.05,0.4)) * VINES_WAVE_SPEED;
 	#endif
 	if (istopv > 0.9) {
 	#ifdef WAVING_GRASS
-	if ( mc_Entity.x == ENTITY_TALLGRASS)
-			position.xyz += calcMove(worldpos.xyz, 0.0041, 0.0070, 0.0044, 0.0038, 0.0063, 0.0000, vec3(0.8,0.0,0.8), vec3(0.4,0.0,0.4));
+	if ( mc_Entity.x == ENTITY_GRASS )
+			position.xyz += calcMove(worldpos.xyz, 0.0041, 0.0070, 0.0044, 0.0038, 0.0063, 0.0000, vec3(0.8,0.0,0.8), vec3(0.4,0.0,0.4)) * GRASS_WAVE_SPEED;
 	#endif
 	
 	#ifdef WAVING_FLOWERS
-	if (mc_Entity.x == ENTITY_DANDELION || mc_Entity.x == ENTITY_ROSE)
-			position.xyz += calcMove(worldpos.xyz, 0.0041, 0.005, 0.0044, 0.0038, 0.0240, 0.0000, vec3(0.8,0.0,0.8), vec3(0.4,0.0,0.4));
-	#endif
-	#ifdef WAVING_WHEAT
-	if ( mc_Entity.x == ENTITY_WHEAT)
-			position.xyz += calcMove(worldpos.xyz, 0.0041, 0.0070, 0.0044, 0.0038, 0.0240, 0.0000, vec3(0.8,0.0,0.8), vec3(0.4,0.0,0.4));
+	if (mc_Entity.x == ENTITY_FLOWERS )
+			position.xyz += calcMove(worldpos.xyz, 0.0041, 0.005, 0.0044, 0.0038, 0.0240, 0.0000, vec3(0.8,0.0,0.8), vec3(0.4,0.0,0.4)) * FLOWERS_WAVE_SPEED;
 	#endif
 	#ifdef WAVING_FIRE
-	if ( mc_Entity.x == ENTITY_FIRE)
-			position.xyz += calcMove(worldpos.xyz, 0.0105, 0.0096, 0.0087, 0.0063, 0.0097, 0.0156, vec3(1.2,0.4,1.2), vec3(0.8,0.8,0.8));
+	if ( mc_Entity.x == ENTITY_FIRE )
+			position.xyz += calcMove(worldpos.xyz, 0.0105, 0.0096, 0.0087, 0.0063, 0.0097, 0.0156, vec3(1.3,0.5,1.3), vec3(0.9,0.9,0.9)) * FIRE_WAVE_SPEED;
 	#endif
+	#ifdef WAVING_FUNGI
+	if ( mc_Entity.x == ENTITY_FUNGI )
+			position.xyz += calcMove(worldpos.xyz, 0.0001, 0.0001, 0.0001, 0.0000, 0.0001, 0.0001, vec3(0.8,0.5,0.4), vec3(0.8, 0.3, 0.6)) * FUNGI_WAVE_SPEED;
 	}
-	#ifdef WAVING_LAVA
-	if ( mc_Entity.x == ENTITY_LAVAFLOWING || mc_Entity.x == ENTITY_LAVASTILL ) {
-			position.xyz += calcWaterMove(worldpos.xyz) * 0.25;
-			}
 	#endif
-	#ifdef WAVING_LILYPAD
-	if ( mc_Entity.x == ENTITY_LILYPAD ) {
-			position.xyz += calcWaterMove(worldpos.xyz);
-			}
-	#endif
+
+	//////////////////// END OF WAVING OBJECTS ////////////////////
+	//////////////////// END OF WAVING OBJECTS ////////////////////
+	//////////////////// END OF WAVING OBJECTS ////////////////////
+
 	float translucent = 1.0;
-		if (mc_Entity.x == ENTITY_LEAVES || mc_Entity.x == ENTITY_VINES || mc_Entity.x == ENTITY_TALLGRASS || mc_Entity.x == ENTITY_DANDELION || mc_Entity.x == ENTITY_ROSE || mc_Entity.x == ENTITY_WHEAT || mc_Entity.x == 30.0
-	|| mc_Entity.x == 175.0	|| mc_Entity.x == 115.0 || mc_Entity.x == 32.0) {
+		if (mc_Entity.x == ENTITY_LEAVES || mc_Entity.x == ENTITY_VINES || mc_Entity.x == ENTITY_FLOWERS || mc_Entity.x == 30.0 || mc_Entity.x == 175.0	
+		|| mc_Entity.x == 115.0 || mc_Entity.x == 32.0) {
 	mat = 0.2;
 	translucent = 0.5;
 	}

@@ -113,10 +113,10 @@ uniform mat4 shadowModelView;
 ////////////////////sunlight color////////////////////
 const ivec4 ToD[25] = ivec4[25](ivec4(0,200,134,48), //hour,r,g,b
 								ivec4(1,200,134,48),
-								ivec4(2,200,134,48),
-								ivec4(3,200,134,48),
-								ivec4(4,200,134,48),
-								ivec4(5,200,134,48),
+								ivec4(2,200,134,52),
+								ivec4(3,200,134,54),
+								ivec4(4,200,134,56),
+								ivec4(5,200,134,58),
 								ivec4(6,200,134,90),
 								ivec4(7,200,180,110),
 								ivec4(8,200,186,132),
@@ -130,10 +130,10 @@ const ivec4 ToD[25] = ivec4[25](ivec4(0,200,134,48), //hour,r,g,b
 								ivec4(16,200,186,132),
 								ivec4(17,200,180,110),
 								ivec4(18,200,153,90),
-								ivec4(19,200,134,48),
-								ivec4(20,200,134,48),
-								ivec4(21,200,134,48),
-								ivec4(22,200,134,48),
+								ivec4(19,200,134,58),
+								ivec4(20,200,134,56),
+								ivec4(21,200,134,54),
+								ivec4(22,200,134,52),
 								ivec4(23,200,134,48),
 								ivec4(24,200,134,48));
 								
@@ -152,7 +152,7 @@ vec3 sky_color = vec3(0.1, 0.35, 1.);
 vec3 nsunlight = normalize(pow(sunlight,vec3(2.2))*vec3(1.,0.9,0.8));
 vec3 sVector = normalize(fposition);
 
-sky_color = normalize(mix(sky_color,vec3(0.25,0.3,0.4)*length(sunlight)*0.3,rainStrength)); //normalize colors in order to don't change luminance
+sky_color = normalize(mix(sky_color,vec3(0.25,0.3,0.4)*length(sunlight)*0.35,rainStrength)); //normalize colors in order to don't change luminance
 /*--------------------------------*/
 float Lz = 1.0;
 float cosT = dot(sVector,upVec); 
@@ -172,9 +172,9 @@ float e = 0.45;
 
 //sun sky color
 float L =  (1+a*exp(b/(absCosT+0.01)))*(1+c*exp(d*Y)+e*cosY*cosY); 
-L = pow(L,1.0-rainStrength*0.8)*(1.0-rainStrength*0.8); //modulate intensity when raining
+L = pow(L,1.0-rainStrength*0.8)*(1.0-rainStrength*0.75); //modulate intensity when raining
 
-vec3 skyColorSun = mix(sky_color, nsunlight,1-exp(-0.005*pow(L,4.)*(1-rainStrength*0.8)))*L*0.5; //affect color based on luminance (0% physically accurate)
+vec3 skyColorSun = mix(sky_color, nsunlight,1-exp(-0.005*pow(L,4.)*(1-rainStrength*0.9)))*L*0.5; //affect color based on luminance (0% physically accurate)
 skyColorSun *= sunVisibility;
 /*--------------------------------*/
 
@@ -189,7 +189,7 @@ float MY = acos(McosY);
 float L2 =  (1+a*exp(b/(absCosT+0.01)))*(1+c*exp(d*MY)+e*McosY*McosY)+0.2;
 L2 = pow(L2,1.0-rainStrength*0.8)*(1.0-rainStrength*0.35); //modulate intensity when raining
 
-vec3 skyColormoon = mix(pow(normalize(moonlight),vec3(2.2))*length(moonlight),normalize(vec3(0.25,0.3,0.4))*length(moonlight),rainStrength)*L2*0.8 ; //affect color based on luminance (0% physically accurate)
+vec3 skyColormoon = mix(pow(normalize(moonlight),vec3(2.2))*length(moonlight),normalize(vec3(0.25,0.3,0.4))*length(moonlight),rainStrength)*L2*0.9 ; //affect color based on luminance (0% physically accurate)
 skyColormoon *= moonVisibility;
 sky_color = skyColormoon*2.0+skyColorSun;
 /*--------------------------------*/
@@ -245,7 +245,7 @@ void main() {
 	ambient_color = (getSkyColor(wUp) + getSkyColor(wS1) + getSkyColor(wS2) + getSkyColor(wS3) + getSkyColor(wS4))*2.;
 	ambient_color = pow(normalize(ambient_color),vec3(1./2.2))*length(ambient_color);		
 	/*--------------------------------*/
-	eyeAdapt = (2.0-min(length((getSkyColor(wUp) + getSkyColor(wS1) + getSkyColor(wS2) + getSkyColor(wS3) + getSkyColor(wS4))*2.)/sqrt(3.)*2.,eyeBrightnessSmooth.y/255.0*1.6+0.3))*(1-rainStrength*0.2);
+	eyeAdapt = (2.0-min(length((getSkyColor(wUp) + getSkyColor(wS1) + getSkyColor(wS2) + getSkyColor(wS3) + getSkyColor(wS4))*2.)/sqrt(3.)*2.,eyeBrightnessSmooth.y/255.0*1.6+0.3))*(1-rainStrength*0.5);
 	/*--------------------------------*/
 
 	handItemLight = 0.0;

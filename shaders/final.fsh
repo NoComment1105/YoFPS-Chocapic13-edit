@@ -21,7 +21,7 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
 //----------Lighting----------//
 	#define DYNAMIC_HANDLIGHT
 	
-	#define SUNLIGHTAMOUNT 4.0				//change sunlight strength , see .vsh for colors. /1.7 is default
+	#define SUNLIGHTAMOUNT 1.0				//change sunlight strength , see .vsh for colors. /1.7 is default
 	
 	#define TORCH_COLOR_LIGHTING 3.5,3.0,3.0 	//Torch Color RGB - Red, Green, Blue
 		#define TORCH_INTENSITY 8.				//torch light intensity
@@ -82,9 +82,9 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
 			*/
 
 //tonemapping constants			
-float A = 1.2;		
-float B = 0.4;		
-float C = 0.1;	
+float A = 0.75;		
+float B = 0.6;		
+float C = 0.11;	
 
 
 
@@ -193,7 +193,7 @@ vec3 sky_color = vec3(0.1, 0.35, 1.);
 vec3 nsunlight = normalize(pow(sunlight,vec3(2.2))*vec3(1.,0.9,0.8));
 vec3 sVector = normalize(fposition);
 /*--------------------------------*/
-sky_color = normalize(mix(sky_color,vec3(0.25,0.3,0.4)*length(ambient_color),rainStrength)); //normalize colors in order to don't change luminance
+sky_color = normalize(mix(sky_color,vec3(0.25,0.3,0.45)*length(ambient_color),rainStrength)); //normalize colors in order to don't change luminance
 /*--------------------------------*/
 float Lz = 1.0;
 float cosT = dot(sVector,upVec); 
@@ -212,7 +212,7 @@ float e = 0.45;
 
 //sun sky color
 float L =  (1+a*exp(b/(absCosT+0.01)))*(1+c*exp(d*Y)+e*cosY*cosY); 
-L = pow(L,1.0-rainStrength*0.8)*(1.0-rainStrength*0.83); //modulate intensity when raining
+L = pow(L,1.0-rainStrength*0.81)*(1.09-rainStrength*0.81); //modulate intensity when raining
 /*--------------------------------*/
 vec3 skyColorSun = mix(sky_color, nsunlight,1-exp(-0.005*pow(L,4.)*(1-rainStrength*0.5)))*L*0.5*vec3(0.8,0.9,1.); //affect color based on luminance (0% physically accurate)
 skyColorSun *= sunVisibility;
@@ -240,8 +240,8 @@ vec3 sVector = normalize(fposition);
 
 float angle = (1-max(dot(sVector,sunVec),0.0))*350.0;
 float sun = exp(-angle*angle);
-sun *= land*(1-rainStrength*0.9925)*sunVisibility;
-vec3 sunlight = mix(sunlight,vec3(0.25,0.3,0.4)*length(ambient_color),rainStrength*0.8);
+sun *= land*(1.03-rainStrength*0.9925)*sunVisibility;
+vec3 sunlight = mix(sunlight,vec3(0.25,0.3,0.4)*length(ambient_color),rainStrength*0.75);
 
 return mix(color,sunlight*4.,sun);
 
@@ -268,7 +268,7 @@ return min((pow((max((h),58.0)-58.0)/30.,2.0)*20.0+10.0),35.0);
 }
 
 vec3 calcFog(vec3 fposition, vec3 color, vec3 fogclr) {
-	float density = 5000. + max(1500*(1-(abs(worldTime*1.0-6000)/6000.0)),0.0)*(1-rainStrength)-rainStrength*3000;
+	float density = 5000. + max(1500*(1-(abs(worldTime*1.0-6000)/6000.0)),0.0)*(1.4-rainStrength)-rainStrength*3000;
 	/*--------------------------------*/
 	vec3 worldpos = (gbufferModelViewInverse*vec4(fposition,1.0)).rgb+cameraPosition;
 	float d = length(fposition);
@@ -324,51 +324,49 @@ return pow(max(dot(vec,normalize(pos))*0.5+0.5,0.0),N)*(N+1)/6.28;
 
 }
 
-vec3 drawCloud(vec3 fposition,vec3 color) {
-/*--------------------------------*/
-vec3 sVector = normalize(fposition);
-float cosT = max(dot(normalize(sVector),upVec),0.0);
-float McosY = MdotU;
-float cosY = SdotU;
-vec3 tpos = vec3(gbufferModelViewInverse * vec4(fposition,1.0));
-vec3 wvec = normalize(tpos);
-vec3 wVector = normalize(tpos);
-/*--------------------------------*/
-vec4 totalcloud = vec4(.0);
-/*--------------------------------*/
-vec3 intersection = wVector*((-cameraPosition.y+400.0+400*sqrt(cosT))/(wVector.y));
-vec3 iSpos = (gbufferModelView*vec4(intersection,1.0)).rgb;
-float cosT2 = max(dot(normalize(iSpos),upVec),0.0);
-/*--------------------------------*/	
-for (int i = 0;i<7;i++) {
-	intersection = wVector*((-cameraPosition.y+300.0-i*3.66*(1+cosT2*cosT2*3.5)+500*sqrt(cosT2))/(wVector.y)); 			//curved cloud plane
-	vec3 wpos = tpos.xyz+cameraPosition;
-	vec2 coord1 = (intersection.xz+cameraPosition.xz)/1000.0/140.+wind[0]*0.07;
-	vec2 coord = fract(coord1/2.0);
-	/*--------------------------------*/
-	float noise = texture2D(noisetex,coord).x;
-	noise += texture2D(noisetex,coord*3.5).x/3.5;
-	noise += texture2D(noisetex,coord*12.25).x/12.25;
-	noise += texture2D(noisetex,coord*42.87).x/42.87;	
-	noise /= 1.4472;
-	/*--------------------------------*/
-	float cl = max(noise-0.6  +rainStrength*0.4,0.0)*(1-rainStrength*0.4);
-	float density = max(1-cl*2.5,0.)*max(1-cl*2.5,0.)*(i/7.)*(i/7.);
-	/*--------------------------------*/  
-	vec3 c =(ambient_color + mix(sunlight,length(sunlight)*vec3(0.25,0.32,0.4),rainStrength)*sunVisibility + mix(moonlight,length(moonlight)*vec3(0.25,0.32,0.4),rainStrength) * moonVisibility) * 0.12 *density + (24.*subSurfaceScattering(sunVec,fposition,10.0)*pow(density,3.) + 10.*subSurfaceScattering2(sunVec,fposition,0.1)*pow(density,2.))*mix(sunlight,length(sunlight)*vec3(0.25,0.32,0.4),rainStrength)*sunVisibility +  (24.*subSurfaceScattering(moonVec,fposition,10.0)*pow(density,3.) + 10.*subSurfaceScattering2(moonVec,fposition,0.1)*pow(density,2.))*mix(moonlight,length(moonlight)*vec3(0.25,0.32,0.4),rainStrength)*moonVisibility;
-	cl = max(cl-(abs(i-3.0)/3.)*0.15,0.)*0.146;
-	/*--------------------------------*/
-	totalcloud += vec4(c.rgb*exp(-totalcloud.a),cl);
-	totalcloud.a = min(totalcloud.a,1.0);
-	/*--------------------------------*/
-	if (totalcloud.a > 0.999) break;
-}
+// vec3 drawCloud(vec3 fposition,vec3 color) {
+// /*--------------------------------*/
+// vec3 sVector = normalize(fposition);
+// float cosT = max(dot(normalize(sVector),upVec),0.0);
+// float McosY = MdotU;
+// float cosY = SdotU;
+// vec3 tpos = vec3(gbufferModelViewInverse * vec4(fposition,1.0));
+// vec3 wvec = normalize(tpos);
+// vec3 wVector = normalize(tpos);
+// /*--------------------------------*/
+// vec4 totalcloud = vec4(.0);
+// /*--------------------------------*/
+// vec3 intersection = wVector*((-cameraPosition.y+400.0+200*sqrt(cosT))/(wVector.y));
+// vec3 iSpos = (gbufferModelView*vec4(intersection,1.0)).rgb;
+// float cosT2 = max(dot(normalize(iSpos),upVec),0.1);
+// /*--------------------------------*/	
+// for (int i = 0;i<8;i++) {
+// 	intersection = wVector*((-cameraPosition.y+400.0-i*3.66*(1+cosT2*cosT2*3.5)+500*sqrt(cosT2))/(wVector.y)); 			//curved cloud plane
+// 	vec3 wpos = tpos.xyz+cameraPosition;
+// 	vec2 coord1 = (intersection.xz+cameraPosition.xz)/1500.0/140.+wind[0]*0.07;
+// 	vec2 coord = fract(coord1/2.0);
+// 	/*--------------------------------*/
+// 	float noise = texture2D(noisetex,coord).x;
+// 	noise += texture2D(noisetex,coord*3.5).x/3.5;
+// 	noise += texture2D(noisetex,coord*12.25).x/12.25;
+// 	noise += texture2D(noisetex,coord*42.87).x/42.87;	
+// 	noise /= 1.4472;
+// 	/*--------------------------------*/
+// 	float cl = max(noise-0.6  +rainStrength*0.4,0.0)*(1-rainStrength*0.4);
+// 	float density = max(1-cl*2.5,0.)*max(1-cl*2.5,0.)*(i/7.)*(i/7.);
+// 	/*--------------------------------*/  
+// 	vec3 c =(ambient_color + mix(sunlight,length(sunlight)*vec3(0.25,0.32,0.4),rainStrength)*sunVisibility + mix(moonlight,length(moonlight)*vec3(0.25,0.32,0.4),rainStrength) * moonVisibility) * 0.12 *density + (24.*subSurfaceScattering(sunVec,fposition,10.0)*pow(density,3.) + 10.*subSurfaceScattering2(sunVec,fposition,0.1)*pow(density,2.))*mix(sunlight,length(sunlight)*vec3(0.25,0.32,0.4),rainStrength)*sunVisibility +  (24.*subSurfaceScattering(moonVec,fposition,10.0)*pow(density,3.) + 10.*subSurfaceScattering2(moonVec,fposition,0.1)*pow(density,2.))*mix(moonlight,length(moonlight)*vec3(0.25,0.32,0.4),rainStrength)*moonVisibility;
+// 	cl = max(cl-(abs(i-3.0)/3.)*0.12,0.)*0.106;
+// 	/*--------------------------------*/
+// 	totalcloud += vec4(c.rgb*exp(-totalcloud.a),cl);
+// 	totalcloud.a = min(totalcloud.a,1.0);
+// 	/*--------------------------------*/
+// 	if (totalcloud.a > 0.999) break;
+// }
 
-return mix(color.rgb,totalcloud.rgb*(1 - rainStrength*0.87)*4.6,totalcloud.a*pow(cosT2,1.2));
+// return mix(color.rgb,totalcloud.rgb*(1 - rainStrength*0.87)*4.6,totalcloud.a*pow(cosT2,1.2));
 
-}
-
-
+// }
 
 float waterH(vec3 posxz) {
 
@@ -570,7 +568,7 @@ void main() {
 		float depth = length(uVec)*UNdotUP;
 		float sky_absorbance = mix(mix(1.0,exp(-depth/2.5)*0.4,iswater),1.0,isEyeInWater);
 	
-	vec3 sun_light = lc*pow(aux.r,8.0)*2.*(1.0-rainStrength*0.95);
+	vec3 sun_light = lc*pow(aux.r,8.0)*2.*(1.1-rainStrength*0.95);
 	vec3 skylight = skycolor*sky_lightmap*0.05;
 	color.rgb = (sun_light+skylight+torch_lightmap)*sky_absorbance*color*1.12;
 	
@@ -611,7 +609,7 @@ void main() {
 	color.rgb = skyGradient(fragpos.xyz,color.rgb,fogclr);
 	color.rgb = drawSun(fragpos,color.rgb,land);
 	
-	if (cosT > 0.) color.rgb = drawCloud(fragpos.xyz,color.rgb);
+	//if (cosT > 0.) color.rgb = drawCloud(fragpos.xyz,color.rgb);
 	}
 	
 	if (isEyeInWater == 1) color.rgb = underwaterFog(length(fragpos),color.rgb);
@@ -671,7 +669,7 @@ void main() {
 
 	#ifdef RAIN_DROPS
 	vec3 c_rain = rainlens*ambient_color*0.0008;
-	color = (((1-(1-color.xyz/48.0)*(1-c_rain.xyz))*48.0));
+	color = (((1-(1-color.xyz/42.0)*(1-c_rain.xyz))*42.0));
 	#endif
 /*--------------------------------*/
 
@@ -732,6 +730,5 @@ void main() {
 	#endif	
 
 
-	
 	gl_FragColor = vec4(color,1.0);
 }
