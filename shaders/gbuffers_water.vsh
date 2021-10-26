@@ -9,17 +9,10 @@ Read the terms of modification and sharing before changing something below pleas
 
 //disabling is done by adding "//" to the beginning of a line.
 
-//////////////////////////////ADJUSTABLE VARIABLES
-//////////////////////////////ADJUSTABLE VARIABLES
-//////////////////////////////ADJUSTABLE VARIABLES
 
 //#define WAVING_WATER
 
-#define WATER 7.0//Define water in block.properties
-
-//////////////////////////////END OF ADJUSTABLE VARIABLES
-//////////////////////////////END OF ADJUSTABLE VARIABLES
-//////////////////////////////END OF ADJUSTABLE VARIABLES
+#define WATER 7.0 //Define water in block.properties
 
 varying vec4 color;
 varying vec2 texcoord;

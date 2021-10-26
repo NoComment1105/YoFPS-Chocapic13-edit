@@ -93,31 +93,33 @@ uniform mat4 shadowModelView;
 ////////////////////sunlight color////////////////////
 ////////////////////sunlight color////////////////////
 ////////////////////sunlight color////////////////////
-const ivec4 ToD[25] = ivec4[25](ivec4(0, 200, 134, 48), //hour,r,g,b
-ivec4(1, 200, 134, 48),
-ivec4(2, 200, 134, 52),
-ivec4(3, 200, 134, 54),
-ivec4(4, 200, 134, 56),
-ivec4(5, 200, 134, 58),
-ivec4(6, 200, 134, 90),
-ivec4(7, 200, 180, 110),
-ivec4(8, 200, 186, 132),
-ivec4(9, 200, 195, 143),
-ivec4(10, 200, 199, 154),
-ivec4(11, 200, 200, 165),
-ivec4(12, 200, 200, 171),
-ivec4(13, 200, 200, 165),
-ivec4(14, 200, 199, 154),
-ivec4(15, 200, 195, 143),
-ivec4(16, 200, 186, 132),
-ivec4(17, 200, 180, 110),
-ivec4(18, 200, 153, 90),
-ivec4(19, 200, 134, 58),
-ivec4(20, 200, 134, 56),
-ivec4(21, 200, 134, 54),
-ivec4(22, 200, 134, 52),
-ivec4(23, 200, 134, 48),
-ivec4(24, 200, 134, 48));
+const ivec4 ToD[25] = ivec4[25](
+    ivec4(0, 200, 134, 48), //hour,r,g,b
+    ivec4(1, 200, 134, 48),
+    ivec4(2, 200, 134, 52),
+    ivec4(3, 200, 134, 54),
+    ivec4(4, 200, 134, 56),
+    ivec4(5, 200, 134, 58),
+    ivec4(6, 200, 134, 90),
+    ivec4(7, 200, 180, 110),
+    ivec4(8, 200, 186, 132),
+    ivec4(9, 200, 195, 143),
+    ivec4(10, 200, 199, 154),
+    ivec4(11, 200, 200, 165),
+    ivec4(12, 200, 200, 171),
+    ivec4(13, 200, 200, 165),
+    ivec4(14, 200, 199, 154),
+    ivec4(15, 200, 195, 143),
+    ivec4(16, 200, 186, 132),
+    ivec4(17, 200, 180, 110),
+    ivec4(18, 200, 153, 90),
+    ivec4(19, 200, 134, 58),
+    ivec4(20, 200, 134, 56),
+    ivec4(21, 200, 134, 54),
+    ivec4(22, 200, 134, 52),
+    ivec4(23, 200, 134, 48),
+    ivec4(24, 200, 134, 48)
+);
 
 vec3 sky_color = ivec3(60, 170, 255) / 255.0;
 /*--------------------------------*/
@@ -130,7 +132,7 @@ vec3 getSkyColor(vec3 fposition) {
     float sunVisibility = pow(clamp(SdotU + 0.1, 0.0, 0.1) / 0.1, 2.0);
     float moonVisibility = pow(clamp(MdotU + 0.1, 0.0, 0.1) / 0.1, 2.0);
     /*--------------------------------*/
-    vec3 sky_color = vec3(0.1, 0.35, 1);
+    vec3 sky_color = vec3(0.2, 0.35, 2);
     vec3 nsunlight = normalize(pow(sunlight, vec3(2.2)) * vec3(1, 0.9, 0.8));
     vec3 sVector = normalize(fposition);
 
@@ -153,10 +155,10 @@ vec3 getSkyColor(vec3 fposition) {
     /*--------------------------------*/
 
     //sun sky color
-    float L =  (1 + a * exp(b / (absCosT + 0.01))) * (1 + c * exp(d * Y) + e * cosY * cosY);
+    float L =  (1 + a * exp(b / (absCosT + 0.1))) * (1 + c * exp(d * Y) + e * cosY * cosY);
     L = pow(L, 1.0 - rainStrength * 0.8) * (1.0 - rainStrength * 0.75);  //modulate intensity when raining
 
-    vec3 skyColorSun = mix(sky_color, nsunlight, 1 - exp(-0.005 * pow(L, 4) * (1 - rainStrength * 0.9))) * L * 0.5;//affect color based on luminance (0% physically accurate)
+    vec3 skyColorSun = mix(sky_color, nsunlight, 1 - exp(-0.005 * pow(L, 4) * (1 - rainStrength * 0.9))) * L * 0.45;//affect color based on luminance (0% physically accurate)
     skyColorSun *= sunVisibility;
     /*--------------------------------*/
 
@@ -207,7 +209,7 @@ void main() {
     moonVisibility = pow(clamp(MdotU + 0.1, 0.0, 0.1) / 0.1, 2.0);
     /*--------------------------------*/
 
-    float hour = mod(worldTime / 1000.0 + 6.0, 24);
+    float hour = mod(worldTime / 1000.0 + 6.3, 24);
 
     ivec4 temp = ToD[int(mod(floor(hour), 24))];
     ivec4 temp2 = ToD[int(mod(floor(hour) + 1, 24))];

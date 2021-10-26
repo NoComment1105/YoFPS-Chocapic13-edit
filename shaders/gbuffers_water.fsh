@@ -12,19 +12,19 @@ Read the terms of modification and sharing before changing something below pleas
 //////////////////////////////ADJUSTABLE VARIABLES
 //////////////////////////////ADJUSTABLE VARIABLES
 
-	//#define MIX_TEX 0.7	
-	vec4 watercolor = vec4(0.1, 0.75, 0.6, 0.25); 	//water color and opacity (r,g,b,opacity)
+	#define MIX_TEX 0.7	
+	vec4 watercolor = vec4(0.09, 0.7, 0.625, 0.15); 	//water color and opacity (r,g,b,opacity)
 
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 
-const int MAX_OCCLUSION_POINTS = 20;
+const int MAX_OCCLUSION_POINTS 	   = 20;
 const float MAX_OCCLUSION_DISTANCE = 100.0;
-const float bump_distance = 32.0;				//Bump render distance: tiny = 32, short = 64, normal = 128, far = 256
-const float pom_distance = 32.0;				//POM render distance: tiny = 32, short = 64, normal = 128, far = 256
-const float fademult = 0.1;
-const float PI = 3.1415927;
+const float bump_distance          = 32.0;		//Bump render distance: tiny = 32, short = 64, normal = 128, far = 256
+const float pom_distance           = 32.0;		//POM render distance: tiny = 32, short = 64, normal = 128, far = 256
+const float fademult               = 0.1;
+const float PI                     = 3.1415927;
 
 varying vec4 color;
 varying vec2 texcoord;
@@ -43,7 +43,7 @@ uniform float rainStrength;
 uniform float frameTimeCounter;
 uniform vec3 cameraPosition;
 
-float rainx = clamp(rainStrength, 0.0f, 1.0f)/1.0f;
+float rainx = clamp(rainStrength, 0.0f, 1.0f) / 1.0f;
 
 vec2 dx = dFdx(texcoord.xy);
 vec2 dy = dFdy(texcoord.xy);
@@ -62,34 +62,34 @@ float amplitude = 0.2;
 float speed = 4.0;
 float size = 0.2;
 
-float px = posxz.x/50.0 + 250.0;
-float py = posxz.z/50.0  + 250.0;
+float px = posxz.x / 50.0 + 250.0;
+float py = posxz.z / 50.0  + 250.0;
 
-float fpx = abs(fract(px*20.0)-0.5)*2.0;
-float fpy = abs(fract(py*20.0)-0.5)*2.0;
+float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
-float d = length(vec2(fpx,fpy));
+float d = length(vec2(fpx, fpy));
 
 for (int i = 0; i < 3; i++) {
-wave -= d*factor*cos( (1/factor)*px*py*size + 1.0*frameTimeCounter*speed);
-factor /= 2;
+	wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+	factor /= 2;
 }
 
 factor = 1.0;
-px = -posxz.x/50.0 + 250.0;
-py = -posxz.z/150.0 - 250.0;
+px = -posxz.x / 50.0 + 250.0;
+py = -posxz.z / 150.0 - 250.0;
 
-fpx = abs(fract(px*20.0)-0.5)*2.0;
-fpy = abs(fract(py*20.0)-0.5)*2.0;
+fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
-d = length(vec2(fpx,fpy));
+d = length(vec2(fpx, fpy));
 float wave2 = 0.0;
 for (int i = 0; i < 3; i++) {
-wave2 -= d*factor*cos( (1/factor)*px*py*size + 1.0*frameTimeCounter*speed);
-factor /= 2;
+	wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+	factor /= 2;
 }
 
-return amplitude*wave2+amplitude*wave;
+return amplitude * wave2 + amplitude * wave;
 }
 
 //////////////////////////////VOID MAIN//////////////////////////////
