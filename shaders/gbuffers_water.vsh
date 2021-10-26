@@ -15,7 +15,7 @@ Read the terms of modification and sharing before changing something below pleas
 
 //#define WAVING_WATER
 
-#define WATER 7.0 //Define water in block.properties 
+#define WATER 7.0//Define water in block.properties
 
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
@@ -48,86 +48,86 @@ const float PI = 3.1415927;
 //////////////////////////////VOID MAIN//////////////////////////////
 
 void main() {
-	
-	//vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
-	vec4 position = gl_ModelViewMatrix * gl_Vertex;
-	iswater = 0.0f;
-	float displacement = 0.0;
-	
-	/* un-rotate */
-	vec4 viewpos = gbufferModelViewInverse * position;
 
-	vec3 worldpos = viewpos.xyz + cameraPosition;
-	wpos = worldpos;
-	
+    //vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
+    vec4 position = gl_ModelViewMatrix * gl_Vertex;
+    iswater = 0.0f;
+    float displacement = 0.0;
 
+    /* un-rotate */
+    vec4 viewpos = gbufferModelViewInverse * position;
+
+    vec3 worldpos = viewpos.xyz + cameraPosition;
+    wpos = worldpos;
 
 
-	if(mc_Entity.x == WATER) {
-		iswater = 1.0;
-		float fy = fract(worldpos.y + 0.001);
-		
-#ifdef WAVING_WATER
-		float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
-				   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
-		displacement = clamp(wave, -fy, 1.0-fy);
-		viewpos.y += displacement*0.5;
-#endif
-	}
-	
-	/* re-rotate */
-	viewpos = gbufferModelView * viewpos;
 
-	/* projectify */
-	gl_Position = gl_ProjectionMatrix * viewpos;
-	
-	color = gl_Color;
-	
-	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st;
 
-	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).st;
-	
-	gl_FogFragCoord = gl_Position.z;
-	
-	tangent = vec3(0.0);
-	binormal = vec3(0.0);
-	normal = normalize(gl_NormalMatrix * normalize(gl_Normal));
+    if (mc_Entity.x == WATER) {
+        iswater = 1.0;
+        float fy = fract(worldpos.y + 0.001);
 
-	if (gl_Normal.x > 0.5) {
-		//  1.0,  0.0,  0.0
-		tangent  = normalize(gl_NormalMatrix * vec3( 0.0,  0.0, -1.0));
-		binormal = normalize(gl_NormalMatrix * vec3( 0.0, -1.0,  0.0));
-	}
-	
-	else if (gl_Normal.x < -0.5) {
-		// -1.0,  0.0,  0.0
-		tangent  = normalize(gl_NormalMatrix * vec3( 0.0,  0.0,  1.0));
-		binormal = normalize(gl_NormalMatrix * vec3( 0.0, -1.0,  0.0));
-	}
-	
-	else if (gl_Normal.y > 0.5) {
-		//  0.0,  1.0,  0.0
-		tangent  = normalize(gl_NormalMatrix * vec3( 1.0,  0.0,  0.0));
-		binormal = normalize(gl_NormalMatrix * vec3( 0.0,  0.0,  1.0));
-	}
-	
-	else if (gl_Normal.y < -0.5) {
-		//  0.0, -1.0,  0.0
-		tangent  = normalize(gl_NormalMatrix * vec3( 1.0,  0.0,  0.0));
-		binormal = normalize(gl_NormalMatrix * vec3( 0.0,  0.0,  1.0));
-	}
-	
-	else if (gl_Normal.z > 0.5) {
-		//  0.0,  0.0,  1.0
-		tangent  = normalize(gl_NormalMatrix * vec3( 1.0,  0.0,  0.0));
-		binormal = normalize(gl_NormalMatrix * vec3( 0.0, -1.0,  0.0));
-	}
-	
-	else if (gl_Normal.z < -0.5) {
-		//  0.0,  0.0, -1.0
-		tangent  = normalize(gl_NormalMatrix * vec3(-1.0,  0.0,  0.0));
-		binormal = normalize(gl_NormalMatrix * vec3( 0.0, -1.0,  0.0));
-	}
-	
+        #ifdef WAVING_WATER
+        float wave = 0.05 * sin(2 * PI * (frameTimeCounter * 0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
+                   + 0.05 * sin(2 * PI * (frameTimeCounter * 0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
+        displacement = clamp(wave, -fy, 1.0 - fy);
+        viewpos.y += displacement * 0.5;
+        #endif
+    }
+
+    /* re-rotate */
+    viewpos = gbufferModelView * viewpos;
+
+    /* projectify */
+    gl_Position = gl_ProjectionMatrix * viewpos;
+
+    color = gl_Color;
+
+    texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st;
+
+    lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).st;
+
+    gl_FogFragCoord = gl_Position.z;
+
+    tangent = vec3(0.0);
+    binormal = vec3(0.0);
+    normal = normalize(gl_NormalMatrix * normalize(gl_Normal));
+
+    if (gl_Normal.x > 0.5) {
+        //  1.0,  0.0,  0.0
+        tangent  = normalize(gl_NormalMatrix * vec3(0.0, 0.0, -1.0));
+        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
+    }
+
+    else if (gl_Normal.x < -0.5) {
+        // -1.0,  0.0,  0.0
+        tangent  = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
+        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
+    }
+
+    else if (gl_Normal.y > 0.5) {
+        //  0.0,  1.0,  0.0
+        tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
+        binormal = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
+    }
+
+    else if (gl_Normal.y < -0.5) {
+        //  0.0, -1.0,  0.0
+        tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
+        binormal = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
+    }
+
+    else if (gl_Normal.z > 0.5) {
+        //  0.0,  0.0,  1.0
+        tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
+        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
+    }
+
+    else if (gl_Normal.z < -0.5) {
+        //  0.0,  0.0, -1.0
+        tangent  = normalize(gl_NormalMatrix * vec3(-1.0, 0.0, 0.0));
+        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
+    }
+
 
 }

@@ -33,11 +33,11 @@ void main() {
 	
 /* DRAWBUFFERS:04 */
 	
-	vec3 indlmap = texture2D(texture,texcoord.xy).rgb*color.rgb;
+	vec3 indlmap = texture2D(texture, texcoord.xy).rgb * color.rgb;
 	
-	gl_FragData[0] = vec4(indlmap,texture2D(texture,texcoord.xy).a*color.a);
+	gl_FragData[0] = vec4(indlmap, texture2D(texture, texcoord.xy).a * color.a);
 	
-	//x = specularity / y = land(0.0/1.0)/shadow early exit(0.2)/water(0.05) / z = torch lightmap
+	//x = specularity / y = land(0.0 / 1.0) / shadow early exit(0.2) / water(0.05) / z = torch lightmap
 	
 	gl_FragData[1] = vec4(lmcoord.t, 1.0, lmcoord.s, 1.0);
 }

@@ -30,10 +30,10 @@ uniform float wetness;
 void main() {	
 	
 	vec2 adjustedTexCoord = texcoord.st;
-	vec3 albedo = texture2D(texture,adjustedTexCoord).rgb*color.rgb;
+	vec3 albedo = texture2D(texture, adjustedTexCoord).rgb * color.rgb;
 
 
 /* DRAWBUFFERS:04 */
-	gl_FragData[0] = vec4(albedo,texture2D(texture,adjustedTexCoord).a*color.a);
+	gl_FragData[0] = vec4(albedo, texture2D(texture, adjustedTexCoord).a * color.a);
 	gl_FragData[1] = vec4(lmcoord.t, 1.0, lmcoord.s, 1.0);
 }

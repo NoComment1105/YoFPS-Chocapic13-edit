@@ -18,12 +18,12 @@ varying vec4 lmcoord;
 //////////////////////////////VOID MAIN//////////////////////////////
 
 void main() {
-	
-	gl_Position = ftransform();
-	
-	color = gl_Color;
-	
-	texcoord = gl_TextureMatrix[0] * gl_MultiTexCoord0;
-	
-	lmcoord = gl_TextureMatrix[1] * gl_MultiTexCoord1;
+
+    gl_Position = ftransform();
+
+    color = gl_Color;
+
+    texcoord = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+
+    lmcoord = gl_TextureMatrix[1] * gl_MultiTexCoord1;
 }

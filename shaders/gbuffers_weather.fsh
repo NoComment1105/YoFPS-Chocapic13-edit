@@ -23,6 +23,6 @@ void main() {
 	
 /* DRAWBUFFERS:7 */
 	
-	vec4 tex = texture2D(texture, texcoord.xy)*color;
+	vec4 tex = texture2D(texture, texcoord.xy) * color;
 	gl_FragData[0] = tex;
 }

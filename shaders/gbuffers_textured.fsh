@@ -25,5 +25,5 @@ uniform int fogMode;
 void main() {
 	
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = texture2D(texture,texcoord.xy)*color;
+	gl_FragData[0] = texture2D(texture, texcoord.xy) * color;
 }

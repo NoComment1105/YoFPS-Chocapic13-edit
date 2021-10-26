@@ -18,14 +18,14 @@ varying vec3 normal;
 //////////////////////////////VOID MAIN//////////////////////////////
 
 void main() {
-	
-	gl_Position = ftransform();
-	
-	color = gl_Color;
-	
-	texcoord = gl_TextureMatrix[0] * gl_MultiTexCoord0;
 
-	gl_FogFragCoord = gl_Position.z;
-	
-	normal = normalize(gl_NormalMatrix * gl_Normal);
+    gl_Position = ftransform();
+
+    color = gl_Color;
+
+    texcoord = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+
+    gl_FogFragCoord = gl_Position.z;
+
+    normal = normalize(gl_NormalMatrix * gl_Normal);
 }

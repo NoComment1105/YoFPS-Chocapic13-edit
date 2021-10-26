@@ -30,25 +30,25 @@ uniform float rainStrength;
 //////////////////////////////VOID MAIN//////////////////////////////
 
 void main() {
-	
-	texcoord = (gl_MultiTexCoord0).xy;
-	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
-	
-	gl_Position = ftransform();
-	
-	color = gl_Color;
-	
-	normal = normalize(gl_NormalMatrix * gl_Normal);
-	
-	float ndotl = dot(normalize(sunPosition),normal);
-	float ndotup = dot(normalize(upPosition),normal);
-	
-	float SdotU = dot(normalize(sunPosition),normalize(upPosition));
-	float sunVisibility = pow(clamp(SdotU+0.1,0.0,0.1)/0.1,2.0);
-	
-	float t1 = mix(mix(-ndotl,ndotl,sunVisibility),1.0,rainStrength*0.85);
-	
-	float lmult = 0.5*(sqrt(ndotup*0.45+0.55)+(t1*0.47+0.53));
-	lmult = pow(lmult,0.3);
-	lmcoord.t *= lmult;
+
+    texcoord = (gl_MultiTexCoord0).xy;
+    lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
+
+    gl_Position = ftransform();
+
+    color = gl_Color;
+
+    normal = normalize(gl_NormalMatrix * gl_Normal);
+
+    float ndotl = dot(normalize(sunPosition), normal);
+    float ndotup = dot(normalize(upPosition), normal);
+
+    float SdotU = dot(normalize(sunPosition), normalize(upPosition));
+    float sunVisibility = pow(clamp(SdotU + 0.1, 0.0, 0.1) / 0.1, 2.0);
+
+    float t1 = mix(mix(-ndotl, ndotl, sunVisibility), 1.0, rainStrength * 0.85);
+
+    float lmult = 0.5 * (sqrt(ndotup * 0.45 + 0.55) + (t1 * 0.47 + 0.53));
+    lmult = pow(lmult, 0.3);
+    lmcoord.t *= lmult;
 }

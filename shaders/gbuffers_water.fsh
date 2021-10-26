@@ -100,26 +100,27 @@ return amplitude*wave2+amplitude*wave;
 
 void main() {	
 	
-	vec4 tex = vec4((watercolor*length(texture2D(texture, texcoord.xy).rgb*color.rgb)*color).rgb,watercolor.a);
-	if (iswater < 0.9)  tex = texture2D(texture, texcoord.xy)*color;
+	vec4 tex = vec4((watercolor * length(texture2D(texture, texcoord.xy).rgb * color.rgb) * color).rgb, watercolor.a);
+	if (iswater < 0.9)  
+			tex = texture2D(texture, texcoord.xy) * color;
 	
 	vec3 posxz = wpos.xyz;
 
-	posxz.x += sin(posxz.z+frameTimeCounter)*0.25;
-	posxz.z += cos(posxz.x+frameTimeCounter*0.5)*0.25;
+	posxz.x += sin(posxz.z + frameTimeCounter) * 0.25;
+	posxz.z += cos(posxz.x + frameTimeCounter * 0.5) * 0.25;
 	
 	float deltaPos = 0.4;
 	float h0 = waterH(posxz);
-	float h1 = waterH(posxz - vec3(deltaPos,0.0,0.0));
-	float h2 = waterH(posxz - vec3(0.0,0.0,deltaPos));
+	float h1 = waterH(posxz - vec3(deltaPos, 0.0, 0.0));
+	float h2 = waterH(posxz - vec3(0.0, 0.0, deltaPos));
 	
-	float dX = ((h0-h1))/deltaPos;
-	float dY = ((h0-h2))/deltaPos;
+	float dX = ((h0 - h1)) / deltaPos;
+	float dY = ((h0 - h2)) / deltaPos;
 	
 	float nX = sin(atan(dX));
 	float nY = sin(atan(dY));
 	
-	vec3 newnormal = normalize(vec3(nX,nY,1.0));
+	vec3 newnormal = normalize(vec3(nX, nY, 1.0));
 	
 	vec4 frag2;
 		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
@@ -140,5 +141,5 @@ void main() {
 	// }
 	gl_FragData[0] = tex;
 	gl_FragData[1] = frag2;	
-	gl_FragData[2] = vec4(lmcoord.t, mix(1.0,0.05,iswater), lmcoord.s, 1.0);
+	gl_FragData[2] = vec4(lmcoord.t, mix(1.0, 0.05, iswater), lmcoord.s, 1.0);
 }

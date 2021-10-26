@@ -61,9 +61,9 @@ void main() {
 
 	
 
-	vec4 c = mix(color,vec4(1.0),float(mat > 0.58 && mat < 0.62));		//fix weird lightmap bug on emissive blocks
+	vec4 c = mix(color, vec4(1.0), float(mat > 0.58 && mat < 0.62));		//fix weird lightmap bug on emissive blocks
 /* DRAWBUFFERS:04 */
 
-	gl_FragData[0] = texture2D(texture, texcoord)*c;
+	gl_FragData[0] = texture2D(texture, texcoord) * c;
 	gl_FragData[1] = vec4(lmcoord.t, mat, lmcoord.s, 1.0);
 }

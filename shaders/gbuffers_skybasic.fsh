@@ -31,5 +31,5 @@ void main() {
 		fogFactor = clamp(exp(-gl_Fog.density * gl_FogFragCoord), 0.0, 1.0);
 
 
-	gl_FragData[0] = mix(gl_FragData[0],gl_Fog.color,1.0-fogFactor);
+	gl_FragData[0] = mix(gl_FragData[0], gl_Fog.color, 1.0 - fogFactor);
 }
