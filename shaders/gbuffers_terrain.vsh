@@ -142,7 +142,7 @@ void main() {
 	vec2 texcoordminusmid = texcoord  -midcoord;
 	vtexcoordam.pq  = abs(texcoordminusmid) * 2;
 	vtexcoordam.st  = min(texcoord, midcoord - texcoordminusmid);
-	vec2 vtexcoord    = sign(texcoordminusmid) * 0.5 + 0.5;
+	vec2 vtexcoord    = sign(texcoordminusmid) * 1;
 	mat = 1.0f;
 	float istopv = 0.0;
 	//texcoord = gl_MultiTexCoord0.xy;
@@ -216,7 +216,7 @@ void main() {
 	
 	float t1 = mix(mix(-ndotl, ndotl, sunVisibility), 1.0, rainStrength * 0.8);
 	
-	float lmult = 0.5 * (sqrt(ndotup * 0.45 + 0.55) + (t1 * 0.47 + 0.53));
+	float lmult = 0.5 * (sqrt((ndotup * 0.45) + 0.55) + ((t1 * 0.47) + 0.53));
 	lmult = mix(1.0, pow(lmult, 0.33), translucent);
 	lmcoord.t *= lmult;
 

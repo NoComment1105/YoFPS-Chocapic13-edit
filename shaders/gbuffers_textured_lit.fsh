@@ -19,7 +19,7 @@ uniform sampler2D texture;
 
 uniform float rainStrength;
 
-float rainx = clamp(rainStrength, 0.0f, 1.0f)/1.0f;
+float rainx = clamp(rainStrength, 0.0f, 1.0f) / 1.0f;
 
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////

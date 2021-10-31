@@ -154,18 +154,18 @@ float timefract = worldTime;
 
 
 //Raining
-float rainx = clamp(rainStrength, 0.0f, 1.0f)/1.0f;
+float rainx = clamp(rainStrength, 0.0f, 1.0f) / 1.0f;
 float wetx  = clamp(wetness, 0.0f, 1.0f);
 
 //Calculate Time of Day
-float TimeSunrise  = ((clamp(timefract, 23000.0, 24000.0) - 23000.0) / 1000.0) + (1.0 - (clamp(timefract, 0.0, 4000.0) /4000.0));
+float TimeSunrise  = ((clamp(timefract, 23000.0, 24000.0) - 23000.0) / 1000.0) + (1.0 - (clamp(timefract, 0.0, 4000.0) / 4000.0));
 float TimeNoon     = ((clamp(timefract, 0.0, 4000.0)) / 4000.0) - ((clamp(timefract, 8000.0, 12000.0) - 8000.0) / 4000.0);
 float TimeSunset   = ((clamp(timefract, 8000.0, 12000.0) - 8000.0) / 4000.0) - ((clamp(timefract, 12000.0, 12750.0) - 12000.0) / 750.0);
 float TimeMidnight = ((clamp(timefract, 12000.0, 12750.0) - 12000.0) / 750.0) - ((clamp(timefract, 23000.0, 24000.0) - 23000.0) / 1000.0);
 vec2 wind[4] = vec2[4](vec2(abs(frameTimeCounter / 1000.-0.5), abs(frameTimeCounter / 1000.-0.5)) + vec2(0.5),
-					vec2(-abs(frameTimeCounter / 1000.-0.5), abs(frameTimeCounter / 1000.-0.5)),
-					vec2(-abs(frameTimeCounter / 1000.-0.5), -abs(frameTimeCounter / 1000.-0.5)),
-					vec2(abs(frameTimeCounter / 1000.-0.5), -abs(frameTimeCounter / 1000.-0.5)));
+					   vec2(-abs(frameTimeCounter / 1000.-0.5), abs(frameTimeCounter / 1000.-0.5)),
+					   vec2(-abs(frameTimeCounter / 1000.-0.5), -abs(frameTimeCounter / 1000.-0.5)),
+					   vec2(abs(frameTimeCounter / 1000.-0.5), -abs(frameTimeCounter / 1000.-0.5)));
 
 vec3 nvec3(vec4 pos) {
     return pos.xyz / pos.w;
@@ -268,7 +268,7 @@ return min((pow((max((h), 58.0) - 58.0) / 30, 2.0) * 20.0 + 10.0), 35.0);
 }
 
 vec3 calcFog(vec3 fposition, vec3 color, vec3 fogclr) {
-	float density = 5000. + max(1500 * (1 - (abs(worldTime * 1.0 - 6000) / 6000.0)), 0.0) * (1.4 - rainStrength) - rainStrength * 3000;
+	float density = 5000. + max(1500 * (1 - (abs(worldTime - 6000) / 6000.0)), 0.0) * (1.4 - rainStrength) - rainStrength * 3000;
 	/*--------------------------------*/
 	vec3 worldpos = (gbufferModelViewInverse * vec4(fposition, 1.0)).rgb + cameraPosition;
 	float d = length(fposition);
@@ -310,7 +310,7 @@ float getnoise(vec2 pos) {
 }
 
 float cdist(vec2 coord) {
-	return max(abs(coord.s - 0.5), abs(coord.t - 0.5)) * 2.0;
+	return max(abs(coord.s), abs(coord.t)) * 1.9;
 }
 
 float subSurfaceScattering(vec3 vec, vec3 pos, float N) {
@@ -378,11 +378,11 @@ float amplitude = 0.2;
 float speed = 4.0;
 float size = 0.2;
 
-float px = posxz.x / 50.0 + 250.0;
-float py = posxz.z / 50.0  + 250.0;
+float px = posxz.x / 300.0;
+float py = posxz.z / 300.0;
 
-float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
+float fpx = abs(fract(px * 19.5)) * 2.0;
+float fpy = abs(fract(py * 19.5)) * 2.0;
 
 float d = length(vec2(fpx, fpy));
 
@@ -392,11 +392,11 @@ factor /= 2;
 }
 
 factor = 1.0;
-px = -posxz.x / 50.0 + 250.0;
-py = -posxz.z / 150.0 - 250.0;
+px = -posxz.x / 300.0;
+py = -posxz.z / - 100.0;
 
-fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
+fpx = abs(fract(px * 19.5)) * 2.0;
+fpy = abs(fract(py * 19.5)) * 2.0;
 
 d = length(vec2(fpx, fpy));
 float wave2 = 0.0;
@@ -468,7 +468,7 @@ void main() {
 		if (rainStrength > 0.02) {
 		/*--------------------------------*/
 		float gen = 1.0 - fract((ftime + 0.5) * 0.5);
-		vec2 pos = (noisepattern(vec2(-0.94386347 * floor(ftime * 0.5 + 0.25), floor(ftime * 0.5 + 0.25)))) * 0.8 + 0.1 - drop;
+		vec2 pos = (noisepattern(vec2(-0.94386347 * floor(ftime * 0.5 + 0.25), floor(ftime * 0.5 + 0.25)))) * 0.9 + 0.1 - drop;
 		rainlens += gen_circular_lens(fract(pos), 0.04) * gen * rainStrength;
 		/*--------------------------------*/
 		gen = 1.0 - fract((ftime + 1.0) * 0.5);

@@ -19,7 +19,7 @@ Read the terms of modification and sharing before changing something below pleas
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 
-const int MAX_OCCLUSION_POINTS 	   = 20;
+const int   MAX_OCCLUSION_POINTS   = 20;
 const float MAX_OCCLUSION_DISTANCE = 100.0;
 const float bump_distance          = 32.0;		//Bump render distance: tiny = 32, short = 64, normal = 128, far = 256
 const float pom_distance           = 32.0;		//POM render distance: tiny = 32, short = 64, normal = 128, far = 256
@@ -62,8 +62,8 @@ float amplitude = 0.2;
 float speed = 4.0;
 float size = 0.2;
 
-float px = posxz.x / 50.0 + 250.0;
-float py = posxz.z / 50.0  + 250.0;
+float px = posxz.x / 300.0;
+float py = posxz.z / 300.0;
 
 float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
 float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
@@ -76,11 +76,11 @@ for (int i = 0; i < 3; i++) {
 }
 
 factor = 1.0;
-px = -posxz.x / 50.0 + 250.0;
-py = -posxz.z / 150.0 - 250.0;
+px = -posxz.x / 300.0;
+py = -posxz.z / -100.0;
 
-fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
+fpx = abs(fract(px * 19.5)) * 2.0;
+fpy = abs(fract(py * 19.5)) * 2.0;
 
 d = length(vec2(fpx, fpy));
 float wave2 = 0.0;
