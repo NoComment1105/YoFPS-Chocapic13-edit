@@ -142,7 +142,7 @@ void main() {
 	vec2 texcoordminusmid = texcoord  -midcoord;
 	vtexcoordam.pq  = abs(texcoordminusmid) * 2;
 	vtexcoordam.st  = min(texcoord, midcoord - texcoordminusmid);
-	vec2 vtexcoord    = sign(texcoordminusmid) * 1;
+	vec2 vtexcoord    = sign(texcoordminusmid) * 0.5 + 0.5;
 	mat = 1.0f;
 	float istopv = 0.0;
 	//texcoord = gl_MultiTexCoord0.xy;

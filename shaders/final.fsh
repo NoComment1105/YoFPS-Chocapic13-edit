@@ -378,11 +378,11 @@ float amplitude = 0.2;
 float speed = 4.0;
 float size = 0.2;
 
-float px = posxz.x / 300.0;
-float py = posxz.z / 300.0;
+float px = posxz.x / 50.0 + 250.0;
+float py = posxz.z / 50.0 + 250.0;
 
-float fpx = abs(fract(px * 19.5)) * 2.0;
-float fpy = abs(fract(py * 19.5)) * 2.0;
+float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
 float d = length(vec2(fpx, fpy));
 
@@ -392,8 +392,8 @@ factor /= 2;
 }
 
 factor = 1.0;
-px = -posxz.x / 300.0;
-py = -posxz.z / - 100.0;
+px = -posxz.x / 50.0 + 250.0;
+py = -posxz.z / 150 - 250.0;
 
 fpx = abs(fract(px * 19.5)) * 2.0;
 fpy = abs(fract(py * 19.5)) * 2.0;
