@@ -48,7 +48,7 @@ void main() {
 
     float t1 = mix(mix(-ndotl, ndotl, sunVisibility), 1.0, rainStrength * 0.8);
 
-    float lmult = 0.5 * (sqrt(ndotup * 0.1) + (t1 * 1));
+    float lmult = 0.5 * (sqrt(ndotup * 0.45 + 0.55) + (t1 * 0.47 + 0.53));
     lmult = pow(lmult, 0.3);
     lmcoord.t *= lmult;
 }
