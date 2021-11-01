@@ -53,18 +53,15 @@ void main() {
     vec3 worldpos = viewpos.xyz + cameraPosition;
     wpos = worldpos;
 
-
-
-
     if (mc_Entity.x == WATER) {
         iswater = 1.0;
         float fy = fract(worldpos.y + 0.001);
 
         #ifdef WAVING_WATER
-        float wave = 0.05 * sin(2 * PI * (frameTimeCounter * 0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
-                   + 0.05 * sin(2 * PI * (frameTimeCounter * 0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
-        displacement = clamp(wave, -fy, 1.0 - fy);
-        viewpos.y += displacement * 0.5;
+            float wave = 0.05 * sin(2 * PI * (frameTimeCounter * 0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
+                       + 0.05 * sin(2 * PI * (frameTimeCounter * 0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
+            displacement = clamp(wave, -fy, 1.0 - fy);
+            viewpos.y += displacement * 0.5;
         #endif
     }
 
@@ -90,37 +87,25 @@ void main() {
         //  1.0,  0.0,  0.0
         tangent  = normalize(gl_NormalMatrix * vec3(0.0, 0.0, -1.0));
         binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    }
-
-    else if (gl_Normal.x < -0.5) {
+    } else if (gl_Normal.x < -0.5) {
         // -1.0,  0.0,  0.0
         tangent  = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
         binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    }
-
-    else if (gl_Normal.y > 0.5) {
+    } else if (gl_Normal.y > 0.5) {
         //  0.0,  1.0,  0.0
         tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
         binormal = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
-    }
-
-    else if (gl_Normal.y < -0.5) {
+    } else if (gl_Normal.y < -0.5) {
         //  0.0, -1.0,  0.0
         tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
         binormal = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
-    }
-
-    else if (gl_Normal.z > 0.5) {
+    } else if (gl_Normal.z > 0.5) {
         //  0.0,  0.0,  1.0
         tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
         binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    }
-
-    else if (gl_Normal.z < -0.5) {
+    } else if (gl_Normal.z < -0.5) {
         //  0.0,  0.0, -1.0
         tangent  = normalize(gl_NormalMatrix * vec3(-1.0, 0.0, 0.0));
         binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
     }
-
-
 }

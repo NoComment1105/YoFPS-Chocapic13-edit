@@ -188,62 +188,62 @@ float luma(vec3 color) {
 
 
 vec3 getSkyColor(vec3 fposition) {
-/*--------------------------------*/
-vec3 sky_color = vec3(0.1, 0.35, 1.);
-vec3 nsunlight = normalize(pow(sunlight, vec3(2.2)) * vec3(1, 0.9, 0.8));
-vec3 sVector = normalize(fposition);
-/*--------------------------------*/
-sky_color = normalize(mix(sky_color, vec3(0.25, 0.3, 0.45) * length(ambient_color), rainStrength)); //normalize colors in order to don't change luminance
-/*--------------------------------*/
-float Lz = 1.0;
-float cosT = dot(sVector, upVec); 
-float absCosT = max(cosT, 0.0);
-float cosS = dot(sunVec, upVec);
-float S = acos(cosS);				
-float cosY = dot(sunVec, sVector);
-float Y = acos(cosY);	
-/*--------------------------------*/
-float a = -1.;
-float b = -0.24;
-float c = 6.0;
-float d = -0.8;
-float e = 0.45;
-/*--------------------------------*/
+	/*--------------------------------*/
+	vec3 sky_color = vec3(0.1, 0.35, 1.);
+	vec3 nsunlight = normalize(pow(sunlight, vec3(2.2)) * vec3(1, 0.9, 0.8));
+	vec3 sVector = normalize(fposition);
+	/*--------------------------------*/
+	sky_color = normalize(mix(sky_color, vec3(0.25, 0.3, 0.45) * length(ambient_color), rainStrength)); //normalize colors in order to don't change luminance
+	/*--------------------------------*/
+	float Lz = 1.0;
+	float cosT = dot(sVector, upVec); 
+	float absCosT = max(cosT, 0.0);
+	float cosS = dot(sunVec, upVec);
+	float S = acos(cosS);							
+	float cosY = dot(sunVec, sVector);
+	float Y = acos(cosY);		
+	/*--------------------------------*/
+	float a = -1.;
+	float b = -0.24;
+	float c = 6.0;
+	float d = -0.8;
+	float e = 0.45;
+	/*--------------------------------*/
 
-//sun sky color
-float L =  (1 + a * exp(b / (absCosT + 0.01))) * (1 + c * exp(d * Y) + e * cosY * cosY); 
-L = pow(L, 1.0 - rainStrength * 0.81) * (1.09 - rainStrength * 0.81); //modulate intensity when raining
-/*--------------------------------*/
-vec3 skyColorSun = mix(sky_color, nsunlight, 1 - exp(-0.005 * pow(L ,4) * (1 - rainStrength * 0.5))) * L * 0.5 * vec3(0.8, 0.9, 1); //affect color based on luminance (0% physically accurate)
-skyColorSun *= sunVisibility;
-/*--------------------------------*/
+	//sun sky color
+	float L =  (1 + a * exp(b / (absCosT + 0.01))) * (1 + c * exp(d * Y) + e * cosY * cosY); 
+	L = pow(L, 1.0 - rainStrength * 0.81) * (1.09 - rainStrength * 0.81); //modulate intensity when raining
+	/*--------------------------------*/
+	vec3 skyColorSun = mix(sky_color, nsunlight, 1 - exp(-0.005 * pow(L ,4) * (1 - rainStrength * 0.5))) * L * 0.5 * vec3(0.8, 0.9, 1); //affect color based on luminance (0% physically accurate)
+	skyColorSun *= sunVisibility;
+	/*--------------------------------*/
 
-//moon sky color
-float McosS = MdotU;
-float MS = acos(McosS);
-float McosY = dot(moonVec, sVector);
-float MY = acos(McosY);
-/*--------------------------------*/
-float L2 = (1 + a * exp( b / (absCosT + 0.01))) * (1 + c * exp(d * MY) + e * McosY * McosY) + 0.2;
-L2 = pow(L2 , 1.0 - rainStrength * 0.8) * (1.0 -rainStrength * 0.83); //modulate intensity when raining
-/*--------------------------------*/
-vec3 skyColormoon = mix(moonlight, normalize(vec3(0.25, 0.3, 0.4)) * length(moonlight), rainStrength * 0.8) * L2 * 0.8 ; //affect color based on luminance (0% physically accurate)
-skyColormoon *= moonVisibility;
-sky_color = skyColormoon * 2.0 + skyColorSun;
-/*--------------------------------*/
-return sky_color;
+	//moon sky color
+	float McosS = MdotU;
+	float MS = acos(McosS);
+	float McosY = dot(moonVec, sVector);
+	float MY = acos(McosY);
+	/*--------------------------------*/
+	float L2 = (1 + a * exp( b / (absCosT + 0.01))) * (1 + c * exp(d * MY) + e * McosY * McosY) + 0.2;
+	L2 = pow(L2 , 1.0 - rainStrength * 0.8) * (1.0 -rainStrength * 0.83); //modulate intensity when raining
+	/*--------------------------------*/
+	vec3 skyColormoon = mix(moonlight, normalize(vec3(0.25, 0.3, 0.4)) * length(moonlight), rainStrength * 0.8) * L2 * 0.8 ; //affect color based on luminance (0% physically accurate)
+	skyColormoon *= moonVisibility;
+	sky_color = skyColormoon * 2.0 + skyColorSun;
+	/*--------------------------------*/
+	return sky_color;
 }
 
 
 vec3 drawSun(vec3 fposition, vec3 color, int land) {
-vec3 sVector = normalize(fposition);
+	vec3 sVector = normalize(fposition);
 
-float angle = (1 - max(dot(sVector, sunVec), 0.0)) * 350.0;
-float sun = exp(-angle * angle);
-sun *= land * (1.03 - rainStrength * 0.9925) * sunVisibility;
-vec3 sunlight = mix(sunlight, vec3(0.25, 0.3, 0.4) * length(ambient_color), rainStrength * 0.75);
+	float angle = (1 - max(dot(sVector, sunVec), 0.0)) * 350.0;
+	float sun = exp(-angle * angle);
+	sun *= land * (1.03 - rainStrength * 0.9925) * sunVisibility;
+	vec3 sunlight = mix(sunlight, vec3(0.25, 0.3, 0.4) * length(ambient_color), rainStrength * 0.75);
 
-return mix(color, sunlight * 4, sun);
+	return mix(color, sunlight * 4, sun);
 
 }
 
@@ -264,7 +264,7 @@ vec3 skyGradient (vec3 fposition, vec3 color, vec3 fogclr) {
 }
 
 float getAirDensity (float h) {
-return min((pow((max((h), 58.0) - 58.0) / 30, 2.0) * 20.0 + 10.0), 35.0);
+	return min((pow((max((h), 58.0) - 58.0) / 30, 2.0) * 20.0 + 10.0), 35.0);
 }
 
 vec3 calcFog(vec3 fposition, vec3 color, vec3 fogclr) {
@@ -276,7 +276,9 @@ vec3 calcFog(vec3 fposition, vec3 color, vec3 fogclr) {
 	/*--------------------------------*/
 	float fog = clamp(24.0 * exp(-getAirDensity (-cameraPosition.y) / density) * (1.0 - exp(-d * height / density )) / height - 0.3 + rainStrength * 0.25, 0.0, 0.6 + rainStrength * .4);
 	/*--------------------------------*/
+	return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);	
 return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);	
+	return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);	
 }
 
 
@@ -314,104 +316,58 @@ float cdist(vec2 coord) {
 }
 
 float subSurfaceScattering(vec3 vec, vec3 pos, float N) {
-
-return pow(max(dot(vec, normalize(pos)), 0.0), N) * (N + 1) / 6.28;
-
+	return pow(max(dot(vec, normalize(pos)), 0.0), N) * (N + 1) / 6.28;
 }
+
 float subSurfaceScattering2(vec3 vec,vec3 pos, float N) {
-
-return pow(max(dot(vec, normalize(pos)) * 0.5 + 0.5, 0.0), N) * (N + 1) / 6.28;
-
+	return pow(max(dot(vec, normalize(pos)) * 0.5 + 0.5, 0.0), N) * (N + 1) / 6.28;
 }
-
-// vec3 drawCloud(vec3 fposition,vec3 color) {
-// /*--------------------------------*/
-// vec3 sVector = normalize(fposition);
-// float cosT = max(dot(normalize(sVector),upVec),0.0);
-// float McosY = MdotU;
-// float cosY = SdotU;
-// vec3 tpos = vec3(gbufferModelViewInverse * vec4(fposition,1.0));
-// vec3 wvec = normalize(tpos);
-// vec3 wVector = normalize(tpos);
-// /*--------------------------------*/
-// vec4 totalcloud = vec4(.0);
-// /*--------------------------------*/
-// vec3 intersection = wVector*((-cameraPosition.y+400.0+200*sqrt(cosT))/(wVector.y));
-// vec3 iSpos = (gbufferModelView*vec4(intersection,1.0)).rgb;
-// float cosT2 = max(dot(normalize(iSpos),upVec),0.1);
-// /*--------------------------------*/	
-// for (int i = 0;i<8;i++) {
-// 	intersection = wVector*((-cameraPosition.y+400.0-i*3.66*(1+cosT2*cosT2*3.5)+500*sqrt(cosT2))/(wVector.y)); 			//curved cloud plane
-// 	vec3 wpos = tpos.xyz+cameraPosition;
-// 	vec2 coord1 = (intersection.xz+cameraPosition.xz)/1500.0/140.+wind[0]*0.07;
-// 	vec2 coord = fract(coord1/2.0);
-// 	/*--------------------------------*/
-// 	float noise = texture2D(noisetex,coord).x;
-// 	noise += texture2D(noisetex,coord*3.5).x/3.5;
-// 	noise += texture2D(noisetex,coord*12.25).x/12.25;
-// 	noise += texture2D(noisetex,coord*42.87).x/42.87;	
-// 	noise /= 1.4472;
-// 	/*--------------------------------*/
-// 	float cl = max(noise-0.6  +rainStrength*0.4,0.0)*(1-rainStrength*0.4);
-// 	float density = max(1-cl*2.5,0.)*max(1-cl*2.5,0.)*(i/7.)*(i/7.);
-// 	/*--------------------------------*/  
-// 	vec3 c =(ambient_color + mix(sunlight,length(sunlight)*vec3(0.25,0.32,0.4),rainStrength)*sunVisibility + mix(moonlight,length(moonlight)*vec3(0.25,0.32,0.4),rainStrength) * moonVisibility) * 0.12 *density + (24.*subSurfaceScattering(sunVec,fposition,10.0)*pow(density,3.) + 10.*subSurfaceScattering2(sunVec,fposition,0.1)*pow(density,2.))*mix(sunlight,length(sunlight)*vec3(0.25,0.32,0.4),rainStrength)*sunVisibility +  (24.*subSurfaceScattering(moonVec,fposition,10.0)*pow(density,3.) + 10.*subSurfaceScattering2(moonVec,fposition,0.1)*pow(density,2.))*mix(moonlight,length(moonlight)*vec3(0.25,0.32,0.4),rainStrength)*moonVisibility;
-// 	cl = max(cl-(abs(i-3.0)/3.)*0.12,0.)*0.106;
-// 	/*--------------------------------*/
-// 	totalcloud += vec4(c.rgb*exp(-totalcloud.a),cl);
-// 	totalcloud.a = min(totalcloud.a,1.0);
-// 	/*--------------------------------*/
-// 	if (totalcloud.a > 0.999) break;
-// }
-
-// return mix(color.rgb,totalcloud.rgb*(1 - rainStrength*0.87)*4.6,totalcloud.a*pow(cosT2,1.2));
-
-// }
 
 float waterH(vec3 posxz) {
 
-float wave = 0.0;
+	float wave = 0.0;
 
 
-float factor = 1.0;
-float amplitude = 0.2;
-float speed = 4.0;
-float size = 0.2;
+	float factor = 1.0;
+	float amplitude = 0.2;
+	float speed = 4.0;
+	float size = 0.2;
 
-float px = posxz.x / 50.0 + 250.0;
-float py = posxz.z / 50.0 + 250.0;
+	float px = posxz.x / 50.0 + 250.0;
+	float py = posxz.z / 50.0 + 250.0;
 
-float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
+	float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+	float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
-float d = length(vec2(fpx, fpy));
+	float d = length(vec2(fpx, fpy));
 
-for (int i = 0; i < 3; i++) {
-wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-factor /= 2;
-}
+	for (int i = 0; i < 3; i++) {
+		wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+		factor /= 2;
+	}
 
-factor = 1.0;
-px = -posxz.x / 50.0 + 250.0;
-py = -posxz.z / 150 - 250.0;
+	factor = 1.0;
+	px = -posxz.x / 50.0 + 250.0;
+	py = -posxz.z / 150 - 250.0;
 
-fpx = abs(fract(px * 19.5)) * 2.0;
-fpy = abs(fract(py * 19.5)) * 2.0;
+	fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+	fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
-d = length(vec2(fpx, fpy));
-float wave2 = 0.0;
-for (int i = 0; i < 3; i++) {
-wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-factor /= 2;
-}
+	d = length(vec2(fpx, fpy));
+	float wave2 = 0.0;
 
-return amplitude * wave2 + amplitude * wave;
+	for (int i = 0; i < 3; i++) {
+		wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+		factor /= 2;
+	}
+
+	return amplitude * wave2 + amplitude * wave;
 }
 
 vec3 alphablend(vec3 c, vec3 ac, float a) {
-vec3 n_ac = normalize(ac) * (1 / sqrt(3.));
-vec3 nc = sqrt(c * n_ac);
-return mix(c, nc, a);
+	vec3 n_ac = normalize(ac) * (1 / sqrt(3.));
+	vec3 nc = sqrt(c * n_ac);
+	return mix(c, nc, a);
 }
 
 vec3 underwaterFog(float depth, vec3 color) {
@@ -423,6 +379,7 @@ vec3 underwaterFog(float depth, vec3 color) {
 	vec3 fc = Ucolor * length(ambient_color) * 0.05;
 	return mix(fc, c, fog);
 }
+
 float Blinn_Phong(vec3 ppos, vec3 lvector, vec3 normal, float fpow, float gloss, float visibility)  {
 	vec3 lightDir = vec3(lvector);
 	
@@ -444,8 +401,9 @@ float Blinn_Phong(vec3 ppos, vec3 lvector, vec3 normal, float fpow, float gloss,
 }
 
 float smStep (float edge0, float edge1, float x) {
-float t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
-return t * t * (3.0 - 2.0 * t); }
+	float t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+	return t * t * (3.0 - 2.0 * t); 
+}
 	
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////
@@ -465,7 +423,7 @@ void main() {
 	vec2 drop = vec2(0.0, fract(frameTimeCounter / 20.0));
 	/*--------------------------------*/
 #ifdef RAIN_DROPS
-		if (rainStrength > 0.02) {
+	if (rainStrength > 0.02) {
 		/*--------------------------------*/
 		float gen = 1.0 - fract((ftime + 0.5) * 0.5);
 		vec2 pos = (noisepattern(vec2(-0.94386347 * floor(ftime * 0.5 + 0.25), floor(ftime * 0.5 + 0.25)))) * 0.9 + 0.1 - drop;
@@ -501,18 +459,22 @@ void main() {
 	
 	vec3 normal = texture2D(gnormal, newTC).rgb * 2.0 - 1.0;
 	
-		fragpos = nvec3(gbufferProjectionInverse * nvec4(fragpos * 2.0 - 1.0));
-	if (land > 0.9) fragpos = (gbufferModelView * (gbufferModelViewInverse * vec4(fragpos, 1.0) + vec4(.0, max(cameraPosition.y - 70., .0), .0, .0))).rgb;
+	fragpos = nvec3(gbufferProjectionInverse * nvec4(fragpos * 2.0 - 1.0));
+
+	if (land > 0.9) { 
+		fragpos = (gbufferModelView * (gbufferModelViewInverse * vec4(fragpos, 1.0) + vec4(.0, max(cameraPosition.y - 70., .0), .0, .0))).rgb; 
+	}
 	float cosT = dot(normalize(fragpos), upVec);
 	vec3 fogclr = getSkyColor(fragpos.xyz);
-	
-	vec4 worldposition = gbufferModelViewInverse * vec4(fragpos, 1.0);	
 
+
+	vec4 worldposition = gbufferModelViewInverse * vec4(fragpos, 1.0);	
+	
 	
 	if (iswater > 0.9) {
 		vec3 posxz = worldposition.xyz + cameraPosition;
-	posxz.x += sin(posxz.z + frameTimeCounter) * 0.25;
-	posxz.z += cos(posxz.x + frameTimeCounter * 0.5) * 0.25;
+		posxz.x += sin(posxz.z + frameTimeCounter) * 0.25;
+		posxz.z += cos(posxz.x + frameTimeCounter * 0.5) * 0.25;
 	
 		float deltaPos = 0.4;
 		float h0 = waterH(posxz);
@@ -531,11 +493,12 @@ void main() {
 		float refMult = 0.005 - dot(normal, normalize(fragpos).xyz) * 0.003;
 
 	
-	float mask = texture2D(gaux1, newTC.st + refract.xy*refMult).g;
-	mask =  float(mask > 0.04 && mask < 0.07);
-	newTC = (newTC.st + refract.xy*refMult)*mask + newTC.xy*(1-mask);
+		float mask = texture2D(gaux1, newTC.st + refract.xy*refMult).g;
+		mask =  float(mask > 0.04 && mask < 0.07);
+		newTC = (newTC.st + refract.xy*refMult)*mask + newTC.xy*(1-mask);
 
 	}
+
 	float uDepth = texture2D(depthtex1, newTC.xy).x;
 	vec4 t  = (gbufferProjectionInverse * vec4(vec3(newTC.xy,uDepth) * 2.0 - 1.0, 1.0));	
 	vec3 uPos = t.xyz / t.w;
@@ -556,22 +519,24 @@ void main() {
 	vec3 lc = mix(pow(sunlight, vec3(2.2)), moonlight, moonVisibility);
 	lc = mix(lc,vec3(length(lc)) * 0.3,rainStrength * 0.9);
 	
-		vec3 Ucolor= normalize(vec3(0.1, 0.4, 0.6));
+	vec3 Ucolor= normalize(vec3(0.1, 0.4, 0.6));
 
-		//we'll suppose water plane have same height above pixel and at pixel water's surface
-		
-		vec3 uVec = fragpos.xyz - uPos;
-		float UNdotUP = abs(dot(normalize(uVec), normal));
-		float depth = length(uVec) * UNdotUP;
-		float sky_absorbance = mix(mix(1.0, exp(-depth / 2.5) * 0.4, iswater), 1.0, isEyeInWater);
+	//we'll suppose water plane have same height above pixel and at pixel water's surface
+	
+	vec3 uVec = fragpos.xyz - uPos;
+	float UNdotUP = abs(dot(normalize(uVec), normal));
+	float depth = length(uVec) * UNdotUP;
+	float sky_absorbance = mix(mix(1.0, exp(-depth / 2.5) * 0.4, iswater), 1.0, isEyeInWater);
 	
 	vec3 sun_light = lc * pow(aux.r, 8.0) * 2. * (1.1 - rainStrength * 0.95);
 	vec3 skylight = skycolor * sky_lightmap * 0.05;
 	color.rgb = (sun_light + skylight + torch_lightmap) * sky_absorbance * color * 1.12;
 	
-	if (iswater > 0.9) color = mix(Ucolor * length(ambient_color) * 0.01 * sky_lightmap, color, exp(-depth / 16));
+	if (iswater > 0.9) { 
+		color = mix(Ucolor * length(ambient_color) * 0.01 * sky_lightmap, color, exp(-depth / 16)); 
+	}
 	
-		if (iswater > 0.9 && isEyeInWater == 0) {
+	if (iswater > 0.9 && isEyeInWater == 0) {
 		float normalDotEye = dot(normal, normalize(fragpos));
 		float fresnel = pow(max(1.0 + normalDotEye, 0.0), 5.);
 		fresnel = mix(1., fresnel, 0.9) * 0.5;
@@ -592,21 +557,23 @@ void main() {
 		/*--------------------------------*/
     }
 
-	if (land > 0.9)
+	if (land > 0.9) {
 	fragpos.xyz = normalize(fragpos) * vec3(2000 * (0.25 + sunVisibility * 0.75));
-	
-		if (land < 0.9) {
+	}
+
+	if (land < 0.9) {
 		color.rgb = calcFog(fragpos.xyz, color.rgb, (fogclr));
-		}
-		else  {
-	color = pow(texture2D(gcolor, newTC.xy).rgb, vec3(2.2)) * (1 - sunVisibility) * 16.0 * sqrt(max(dot(upVec, normalize(fragpos.xyz)), 0.0)) ;	
-	color.rgb = skyGradient(fragpos.xyz, color.rgb, fogclr);
-	color.rgb = drawSun(fragpos, color.rgb, land);
+	} else {
+		color = pow(texture2D(gcolor, newTC.xy).rgb, vec3(2.2)) * (1 - sunVisibility) * 16.0 * sqrt(max(dot(upVec, normalize(fragpos.xyz)), 0.0)) ;	
+		color.rgb = skyGradient(fragpos.xyz, color.rgb, fogclr);
+		color.rgb = drawSun(fragpos, color.rgb, land);
 	
 	//if (cosT > 0.) color.rgb = drawCloud(fragpos.xyz, color.rgb);
 	}
 	
-	if (isEyeInWater == 1) color.rgb = underwaterFog(length(fragpos), color.rgb);
+	if (isEyeInWater == 1) { 
+		color.rgb = underwaterFog(length(fragpos), color.rgb); 
+	}
 
 
 	vec4 tpos = vec4(sunPosition,1.0) * gbufferProjection;
@@ -633,15 +600,15 @@ void main() {
 	float disty = texcoord.y - lightPos.y;
 	float illuminationDecay = pow(max(1.0 - sqrt(distx * distx + disty * disty), 0.0), 4.0);
 	/*--------------------------------*/
-		for(int i=0; i < nSteps ; i++) {
-			textCoord += deltaTextCoord;
-				
-			float dist = (i-float(center)) / center;
-			float weight = exp(-(dist * dist) / (2.0 * sigma));
-				
-			float sample = texture2D(composite, textCoord).r * weight;
-			tw += weight;
-			gr += sample;
+	for(int i=0; i < nSteps ; i++) {
+		textCoord += deltaTextCoord;
+			
+		float dist = (i-float(center)) / center;
+		float weight = exp(-(dist * dist) / (2.0 * sigma));
+			
+		float sample = texture2D(composite, textCoord).r * weight;
+		tw += weight;
+		gr += sample;
 	}
 
 	vec3 grC = mix(lightColor, fogclr, rainStrength) * exposure * (gr / tw) * illuminationDecay * (1 - isEyeInWater);
@@ -651,22 +618,22 @@ void main() {
 
 
 /*--------------------------------*/
-	//draw rain
-	vec4 rain = pow(texture2D(gaux4, texcoord.xy), vec4(vec3(2.2), 1));
-	if (length(rain) > 0.0001) {
+//draw rain
+vec4 rain = pow(texture2D(gaux4, texcoord.xy), vec4(vec3(2.2), 1));
+if (length(rain) > 0.0001) {
 	rain.rgb = normalize(rain.rgb) * 0.001 * (0.5 + length(rain.rgb) * 0.25) * length(ambient_color);
 	color.rgb = ((1 - (1 - color.xyz / 48.0)*(1 - rain.xyz * rain.a)) * 48.0);
-	}
+}
 /*--------------------------------*/
 
-	#ifdef RAIN_DROPS
+#ifdef RAIN_DROPS
 	vec3 c_rain = rainlens * ambient_color * 0.0008;
 	color = (((1 - (1 - color.xyz / 42.0) * (1 - c_rain.xyz)) * 42.0));
-	#endif
+#endif
 /*--------------------------------*/
 
 	
-	#ifdef LENS_EFFECTS
+#ifdef LENS_EFFECTS
 	/*--------------------------------*/
 	float xdist = abs(lightPos.x-newTC.x);
 	float ydist = abs(lightPos.y-newTC.y);
@@ -676,49 +643,48 @@ void main() {
 	/*--------------------------------*/
 	vec3 light_color = mix(sunlight * sunVisibility, 3 * moonlight * moonVisibility, (truepos + 1.0) / 2.);
 	/*--------------------------------*/
-		if (sunvisibility > 0.05) {
-			vec3 lensColor = exp(-ydist * ydist / 0.003 / (1.5 - centerdist)) * exp(-xdist * xdist / 0.05 / (1.5 - centerdist)) * vec3(0.1, 0.3, 1.0);
-			/*--------------------------------*/
-			vec2 LC = vec2(0.5) - lightPos;
-			/*--------------------------------*/
-			vec2 pos1 = lightPos + LC * 0.7;
-			lensColor += vec3(1.0, 0.3, .1) * gen_circular_lens(vec2(pos1), 0.03 * (1.5 - centerdist)) * 0.58;
-			/*--------------------------------*/
-			pos1 = lightPos + LC * 0.9;
-			lensColor += vec3(0.8, 0.6, .1) * gen_circular_lens(vec2(pos1), 0.06 * (1.5 - centerdist)) * 0.375;
-			/*--------------------------------*/
-			pos1 = lightPos + LC * 1.3;
-			lensColor += vec3(0.1, 1.0, .3) * gen_circular_lens(vec2(pos1), 0.12 * (1.5 - centerdist)) * 0.28;
-			/*--------------------------------*/
-			pos1 = lightPos + LC * 2.1;
-			lensColor += vec3(0.1, 0.6, .8) * gen_circular_lens(vec2(pos1), 0.24 * (1.5 - centerdist)) * 0.21;
-			/*--------------------------------*/
-			lensColor = lensColor * pow(sunvisibility, 2.2) * light_color * LENS_STRENGTH * centerdist;
-			color += lensColor;
-		}
-	#endif
+	if (sunvisibility > 0.05) {
+		vec3 lensColor = exp(-ydist * ydist / 0.003 / (1.5 - centerdist)) * exp(-xdist * xdist / 0.05 / (1.5 - centerdist)) * vec3(0.1, 0.3, 1.0);
+		/*--------------------------------*/
+		vec2 LC = vec2(0.5) - lightPos;
+		/*--------------------------------*/
+		vec2 pos1 = lightPos + LC * 0.7;
+		lensColor += vec3(1.0, 0.3, .1) * gen_circular_lens(vec2(pos1), 0.03 * (1.5 - centerdist)) * 0.58;
+		/*--------------------------------*/
+		pos1 = lightPos + LC * 0.9;
+		lensColor += vec3(0.8, 0.6, .1) * gen_circular_lens(vec2(pos1), 0.06 * (1.5 - centerdist)) * 0.375;
+		/*--------------------------------*/
+		pos1 = lightPos + LC * 1.3;
+		lensColor += vec3(0.1, 1.0, .3) * gen_circular_lens(vec2(pos1), 0.12 * (1.5 - centerdist)) * 0.28;
+		/*--------------------------------*/
+		pos1 = lightPos + LC * 2.1;
+		lensColor += vec3(0.1, 0.6, .8) * gen_circular_lens(vec2(pos1), 0.24 * (1.5 - centerdist)) * 0.21;
+		/*--------------------------------*/
+		lensColor = lensColor * pow(sunvisibility, 2.2) * light_color * LENS_STRENGTH * centerdist;
+		color += lensColor;
+	}
+#endif
 
-	/*--------------------------------*/
-	vec3 curr = Uncharted2Tonemap(color);
-	vec3 whiteScale = 1.0f / Uncharted2Tonemap(vec3( MAX_COLOR_RANGE));
-	color = pow(curr * whiteScale, vec3(1 / 2.2));
-	/*--------------------------------*/
-	
-	float saturation = 0.98;   
-	float avg = (color.r + color.g + color.b);    
-	color = (((color - avg) * saturation) + avg) ;
-	/*--------------------------------*/
-	
-	#ifdef VIGNETTE
+/*--------------------------------*/
+vec3 curr = Uncharted2Tonemap(color);
+vec3 whiteScale = 1.0f / Uncharted2Tonemap(vec3( MAX_COLOR_RANGE));
+color = pow(curr * whiteScale, vec3(1 / 2.2));
+/*--------------------------------*/
+float saturation = 0.98;   
+float avg = (color.r + color.g + color.b);    
+color = (((color - avg) * saturation) + avg) ;
+/*--------------------------------*/
+
+#ifdef VIGNETTE
 	float len = length(texcoord.xy - vec2(.5));
 	float len2 = distratio(texcoord.xy, vec2(.5));
 	/*--------------------------------*/
 	float dc = mix(len, len2, 0.3);
-    float vignette = smStep(VIGNETTE_END, VIGNETTE_START, dc);
+	float vignette = smStep(VIGNETTE_END, VIGNETTE_START, dc);
 	/*--------------------------------*/
 	color = color * (1 + vignette) * 0.5;
-	#endif	
+#endif	
 
 
-	gl_FragColor = vec4(color, 1.0);
+gl_FragColor = vec4(color, 1.0);
 }

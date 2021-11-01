@@ -49,47 +49,47 @@ vec2 dx = dFdx(texcoord.xy);
 vec2 dy = dFdy(texcoord.xy);
 
 float wave(float n) {
-return sin(2 * PI * (n));
+	return sin(2 * PI * (n));
 }
 
 float waterH(vec3 posxz) {
 
-float wave = 0.0;
+	float wave = 0.0;
 
 
-float factor = 1.0;
-float amplitude = 0.2;
-float speed = 4.0;
-float size = 0.2;
+	float factor = 1.0;
+	float amplitude = 0.2;
+	float speed = 4.0;
+	float size = 0.2;
 
-float px = posxz.x / 50.0 + 250.0;
-float py = posxz.z / 50.0 + 250.0;
+	float px = posxz.x / 50.0 + 250.0;
+	float py = posxz.z / 50.0 + 250.0;
 
-float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
+	float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+	float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
-float d = length(vec2(fpx, fpy));
+	float d = length(vec2(fpx, fpy));
 
-for (int i = 0; i < 3; i++) {
-	wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-	factor /= 2;
-}
+	for (int i = 0; i < 3; i++) {
+		wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+		factor /= 2;
+	}
 
-factor = 1.0;
-px = -posxz.x / 50.0 + 250.0;
-py = -posxz.z / 150.0 - 250.0;
+	factor = 1.0;
+	px = -posxz.x / 50.0 + 250.0;
+	py = -posxz.z / 150.0 - 250.0;
 
-fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
+	fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
+	fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
 
-d = length(vec2(fpx, fpy));
-float wave2 = 0.0;
-for (int i = 0; i < 3; i++) {
-	wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-	factor /= 2;
-}
+	d = length(vec2(fpx, fpy));
+	float wave2 = 0.0;
+	for (int i = 0; i < 3; i++) {
+		wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+		factor /= 2;
+	}
 
-return amplitude * wave2 + amplitude * wave;
+	return amplitude * wave2 + amplitude * wave;
 }
 
 //////////////////////////////VOID MAIN//////////////////////////////
@@ -101,8 +101,9 @@ return amplitude * wave2 + amplitude * wave;
 void main() {	
 	
 	vec4 tex = vec4((watercolor * length(texture2D(texture, texcoord.xy).rgb * color.rgb) * color).rgb, watercolor.a);
-	if (iswater < 0.9)  
-			tex = texture2D(texture, texcoord.xy) * color;
+	if (iswater < 0.9) {
+		tex = texture2D(texture, texcoord.xy) * color;
+	}
 	
 	vec3 posxz = wpos.xyz;
 
@@ -125,20 +126,7 @@ void main() {
 	vec4 frag2;
 		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
 		
-	// if (iswater > 0.9) {
-	// 	vec3 bump = newnormal;
-	// 		bump = bump;
-			
-		
-	// 	float bumpmult = 0.05;	
-		
-	// 	bump = bump * vec3(bumpmult, bumpmult, bumpmult) + vec3(0.0f, 0.0f, 1.0f - bumpmult);
-	// 	mat3 tbnMatrix = mat3(tangent.x, binormal.x, normal.x,
-	// 						tangent.y, binormal.y, normal.y,
-	// 						tangent.z, binormal.z, normal.z);
-		
-	// 	frag2 = vec4(normalize(bump * tbnMatrix) * 0.5 + 0.5, 1.0);
-	// }
+
 	gl_FragData[0] = tex;
 	gl_FragData[1] = frag2;	
 	gl_FragData[2] = vec4(lmcoord.t, mix(1.0, 0.05, iswater), lmcoord.s, 1.0);

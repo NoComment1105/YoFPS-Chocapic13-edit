@@ -194,8 +194,7 @@ void main() {
     /*--------------------------------*/
     if (worldTime < 12700 || worldTime > 23250) {
         lightVector = normalize(sunPosition);
-    }
-    else {
+    } else {
         lightVector = normalize(-sunPosition);
     }
     /*--------------------------------*/
@@ -236,30 +235,19 @@ void main() {
     if (heldItemId == 50) {
         // torch
         handItemLight = 0.5;
-    }
-
-    else if (heldItemId == 76 || heldItemId == 94) {
+    } else if (heldItemId == 76 || heldItemId == 94) {
         // active redstone torch / redstone repeater
         handItemLight = 0.1;
-    }
-
-    else if (heldItemId == 89) {
+    } else if (heldItemId == 89) {
         // lightstone
         handItemLight = 0.6;
-    }
-
-    else if (heldItemId == 10 || heldItemId == 11 || heldItemId == 51) {
+    } else if (heldItemId == 10 || heldItemId == 11 || heldItemId == 51) {
         // lava / lava / fire
         handItemLight = 0.5;
-    }
-
-    else if (heldItemId == 91) {
+    } else if (heldItemId == 91) {
         // jack-o-lantern
         handItemLight = 0.6;
-    }
-
-
-    else if (heldItemId == 327) {
+    } else if (heldItemId == 327) {
         handItemLight = 0.2;
     }
     /*--------------------------------*/
