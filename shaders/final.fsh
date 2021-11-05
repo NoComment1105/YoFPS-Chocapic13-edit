@@ -276,9 +276,7 @@ vec3 calcFog(vec3 fposition, vec3 color, vec3 fogclr) {
 	/*--------------------------------*/
 	float fog = clamp(24.0 * exp(-getAirDensity (-cameraPosition.y) / density) * (1.0 - exp(-d * height / density )) / height - 0.3 + rainStrength * 0.25, 0.0, 0.6 + rainStrength * .4);
 	/*--------------------------------*/
-	return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);	
-return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);	
-	return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);	
+	return mix(color, fogclr * mix(vec3(0.35, 0.4, 0.5) * 2., vec3(1.0), max(moonVisibility * (1 - sunVisibility), rainStrength)), fog);		
 }
 
 
