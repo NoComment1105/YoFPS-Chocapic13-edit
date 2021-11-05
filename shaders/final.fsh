@@ -448,7 +448,7 @@ void main() {
 	vec2 newTC = texcoord.st ; //refract turned off in ltie version because of a strange bug
 	/*--------------------------------*/
 
-	vec3 fragpos = vec3(newTC.st, texture2D(depthtex0, newTC.st).r);
+	vec3 fragpos = vec3(newTC.st, texture2D(depthtex1, newTC.st).r);
 
 	vec3 aux = texture2D(gaux1, newTC).rgb;
 
@@ -499,7 +499,7 @@ void main() {
 
 	}
 
-	float uDepth = texture2D(depthtex1, newTC.xy).x;
+	float uDepth = texture2D(depthtex0, newTC.xy).x;
 	vec4 t  = (gbufferProjectionInverse * vec4(vec3(newTC.xy,uDepth) * 2.0 - 1.0, 1.0));	
 	vec3 uPos = t.xyz / t.w;
 	vec3 color = pow(texture2D(gcolor, newTC).rgb, vec3(2.2));
