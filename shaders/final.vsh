@@ -78,6 +78,9 @@ uniform vec3 upPosition;
 uniform int worldTime;
 uniform int heldItemId;
 uniform int heldBlockLightValue;
+uniform int heldItemId2;
+uniform int heldBlockLightValue2;
+uniform int isEyeInWater;
 uniform float rainStrength;
 uniform float wetness;
 uniform ivec2 eyeBrightnessSmooth;
@@ -89,6 +92,9 @@ uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferModelView;
 uniform mat4 shadowProjection;
 uniform mat4 shadowModelView;
+
+#define HANDHELD_LIGHT
+
 /*--------------------------------*/
 ////////////////////sunlight color////////////////////
 ////////////////////sunlight color////////////////////
@@ -232,23 +238,18 @@ void main() {
     /*--------------------------------*/
 
     handItemLight = 0.0;
-    if (heldItemId == 50) {
-        // torch
-        handItemLight = 0.5;
-    } else if (heldItemId == 76 || heldItemId == 94) {
-        // active redstone torch / redstone repeater
-        handItemLight = 0.1;
-    } else if (heldItemId == 89) {
-        // lightstone
-        handItemLight = 0.6;
-    } else if (heldItemId == 10 || heldItemId == 11 || heldItemId == 51) {
-        // lava / lava / fire
-        handItemLight = 0.5;
-    } else if (heldItemId == 91) {
-        // jack-o-lantern
-        handItemLight = 0.6;
-    } else if (heldItemId == 327) {
-        handItemLight = 0.2;
-    }
+    #ifdef HANDHELD_LIGHT
+        if (heldItemId == 1.0 || heldItemId2 == 1.0) {
+            handItemLight = 0.25;
+        } else if (heldItemId == 4.0 || heldItemId2 == 4.0) {
+            handItemLight = 0.2;
+        } else if (heldItemId == 3.0 || heldItemId2 == 3.0) {
+            handItemLight = 0.05;
+        } else if (heldItemId == 2.0 || heldItemId2 == 2.0) {
+            handItemLight = 0.01;
+        } else if (heldItemId == 5.0 || heldItemId2 == 5.0) {
+            handItemLight = 0.003;
+        }
+    #endif
     /*--------------------------------*/
 }
