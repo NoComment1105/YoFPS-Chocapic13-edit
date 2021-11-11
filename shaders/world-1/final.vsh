@@ -3,12 +3,6 @@
 
 
 /*
-
-
-
-
-
-
 !! DO NOT REMOVE !! !! DO NOT REMOVE !!
 
 This code is from Chocapic13' shaders
@@ -48,16 +42,6 @@ Minecraft website:
 
 If you are not sure about what you are allowed to do or not, PM Chocapic13 on http://www.minecraftforum.net/
 Not respecting these rules can and will result in a request of thread/download shutdown to the host/administrator, with or without warning. Intellectual property stealing is punished by law.
-
-
-
-
-
-
-
-
-
-
 
 */
 

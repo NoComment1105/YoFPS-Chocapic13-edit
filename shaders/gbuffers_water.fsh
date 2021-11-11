@@ -124,7 +124,7 @@ void main() {
 	vec3 newnormal = normalize(vec3(nX, nY, 1.0));
 	
 	vec4 frag2;
-		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
+	frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
 		
 
 	gl_FragData[0] = tex;

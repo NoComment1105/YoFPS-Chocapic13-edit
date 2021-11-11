@@ -186,6 +186,4 @@ void main() {
 	float lmult = 0.5 * (sqrt((ndotup * 0.45) + 0.55) + ((t1 * 0.47) + 0.53));
 	lmult = mix(1.0, pow(lmult, 0.33), translucent);
 	lmcoord.t *= lmult;
-
-
 }
