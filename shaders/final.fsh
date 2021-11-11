@@ -148,8 +148,8 @@ uniform float rainStrength;
 uniform float wetness;
 uniform float frameTimeCounter;
 vec3 sunPos = sunPosition;
-float pw = 1.0/ viewWidth;
-float ph = 1.0/ viewHeight;
+float pw = 1.0 / viewWidth;
+float ph = 1.0 / viewHeight;
 float timefract = worldTime;
 
 
@@ -556,7 +556,7 @@ void main() {
     }
 
 	if (land > 0.9) {
-	fragpos.xyz = normalize(fragpos) * vec3(2000 * (0.25 + sunVisibility * 0.75));
+		fragpos.xyz = normalize(fragpos) * vec3(2000 * (0.25 + sunVisibility * 0.75));
 	}
 
 	if (land < 0.9) {
@@ -620,7 +620,7 @@ void main() {
 vec4 rain = pow(texture2D(gaux4, texcoord.xy), vec4(vec3(2.2), 1));
 if (length(rain) > 0.0001) {
 	rain.rgb = normalize(rain.rgb) * 0.001 * (0.5 + length(rain.rgb) * 0.25) * length(ambient_color);
-	color.rgb = ((1 - (1 - color.xyz / 48.0)*(1 - rain.xyz * rain.a)) * 48.0);
+	color.rgb = ((1 - (1 - color.xyz / 48.0) * (1 - rain.xyz * rain.a)) * 48.0);
 }
 /*--------------------------------*/
 
