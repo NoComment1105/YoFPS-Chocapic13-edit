@@ -56,7 +56,6 @@ float waterH(vec3 posxz) {
 
 	float wave = 0.0;
 
-
 	float factor = 1.0;
 	float amplitude = 0.2;
 	float speed = 4.0;
@@ -86,7 +85,7 @@ float waterH(vec3 posxz) {
 	float wave2 = 0.0;
 	for (int i = 0; i < 3; i++) {
 		wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-		factor /= 2;
+		factor /= 2.2;
 	}
 
 	return amplitude * wave2 + amplitude * wave;
@@ -101,30 +100,9 @@ float waterH(vec3 posxz) {
 void main() {	
 	
 	vec4 tex = vec4((watercolor * length(texture2D(texture, texcoord.xy).rgb * color.rgb) * color).rgb, watercolor.a);
-	if (iswater < 0.9) {
-		tex = texture2D(texture, texcoord.xy) * color;
-	}
-	
-	vec3 posxz = wpos.xyz;
-
-	posxz.x += sin(posxz.z + frameTimeCounter) * 0.25;
-	posxz.z += cos(posxz.x + frameTimeCounter * 0.5) * 0.25;
-	
-	float deltaPos = 0.4;
-	float h0 = waterH(posxz);
-	float h1 = waterH(posxz - vec3(deltaPos, 0.0, 0.0));
-	float h2 = waterH(posxz - vec3(0.0, 0.0, deltaPos));
-	
-	float dX = ((h0 - h1)) / deltaPos;
-	float dY = ((h0 - h2)) / deltaPos;
-	
-	float nX = sin(atan(dX));
-	float nY = sin(atan(dY));
-	
-	vec3 newnormal = normalize(vec3(nX, nY, 1.0));
 	
 	vec4 frag2;
-	frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
+		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);
 		
 
 	gl_FragData[0] = tex;

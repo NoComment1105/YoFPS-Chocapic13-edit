@@ -24,7 +24,7 @@ const int   MAX_OCCLUSION_POINTS   = 50;
 const int GL_EXP = 2048;
 const int GL_LINEAR = 9729;
 
-const float bump_distance = 64.0;		//bump render distance: tiny = 32, short = 64, normal = 128, far = 256
+const float bump_distance = 32.0;		//bump render distance: tiny = 32, short = 64, normal = 128, far = 256
 const float pom_distance = 32.0;		//POM render distance: tiny = 32, short = 64, normal = 128, far = 256
 const float fademult = 0.1;
 

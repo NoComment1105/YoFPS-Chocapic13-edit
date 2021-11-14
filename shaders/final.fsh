@@ -1,4 +1,4 @@
-#version 120
+#version 410 compatibility
 #define MAX_COLOR_RANGE 48.0
 const int RGB16 = 3;
 const int gnormalFormat = RGB16;
@@ -46,7 +46,7 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
 #define VIGNETTE_END 0.7		//distance from the center of the screen where the vignette effect end (0-1), bigger than VIGNETTE_START, default 0.7
   
 //#define LENS_EFFECTS			
-	#define LENS_STRENGTH 3.0		//default 1.5
+	#define LENS_STRENGTH 1.5		//default 1.5
 	
 //#define RAIN_DROPS
 
@@ -174,6 +174,7 @@ vec3 nvec3(vec4 pos) {
 vec4 nvec4(vec3 pos) {
     return vec4(pos.xyz, 1.0);
 }
+
 float getDepth(float depth) {
     return 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
 }
@@ -253,9 +254,9 @@ vec3 drawSun(vec3 fposition, vec3 color, int land) {
 vec3 skyGradient (vec3 fposition, vec3 color, vec3 fogclr) {
 	const float density = 1500.0;
 	const float start = 0.0;
-	float rainFog = 1.0+4.0*rainStrength;
+	float rainFog = 1.0 + 4.0 * rainStrength;
 	
-	float fog = min(exp(-length(fposition) / density / (sunVisibility * 0.7 + 0.3) * rainFog) + start * sunVisibility * (1 - rainStrength), 1.0);
+	float fog = min(exp(-length(fposition) / density / fma(sunVisibility, 0.7, 0.3) * rainFog) + start * sunVisibility * (1 - rainStrength), 1.0);
 	
 	vec3 fc = fogclr;
 	return mix(fc, color, fog);		
@@ -356,7 +357,7 @@ float waterH(vec3 posxz) {
 
 	for (int i = 0; i < 3; i++) {
 		wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-		factor /= 2;
+		factor /= 2.5;
 	}
 
 	return amplitude * wave2 + amplitude * wave;
@@ -392,7 +393,7 @@ float Blinn_Phong(vec3 ppos, vec3 lvector, vec3 normal, float fpow, float gloss,
 	
 	float normalDotEye = dot(normal, normalize(ppos));
 	float fresnel = clamp(pow(1.0 + normalDotEye, 5.0), 0.0, 1.0);
-	fresnel = fresnel * 0.85 + 0.15 * (1.0 - fresnel);
+	fresnel = fma(fresnel, 0.85, 0.15) * (1.0 - fresnel);
 	float pi = 3.1415927;
 	float n =  pow(2.0, gloss * 10.0);
 	return (pow(blinnTerm, n ) * ((n + 8.0) / (8 * pi))) * visibility;
@@ -424,15 +425,15 @@ void main() {
 	if (rainStrength > 0.02) {
 		/*--------------------------------*/
 		float gen = 1.0 - fract((ftime + 0.5) * 0.5);
-		vec2 pos = (noisepattern(vec2(-0.94386347 * floor(ftime * 0.5 + 0.25), floor(ftime * 0.5 + 0.25)))) * 0.9 + 0.1 - drop;
+		vec2 pos = (noisepattern(vec2(-0.94386347 * floor(fma(ftime, 0.5, 0.25)), floor(fma(ftime, 0.5, 0.25))))) * 0.9 + 0.1 - drop;
 		rainlens += gen_circular_lens(fract(pos), 0.04) * gen * rainStrength;
 		/*--------------------------------*/
 		gen = 1.0 - fract((ftime + 1.0) * 0.5);
-		pos = (noisepattern(vec2(0.9347 * floor(ftime * 0.5 + 0.5), -0.2533282 * floor(ftime * 0.5 + 0.5)))) * 0.8 + 0.1 - drop;
+		pos = (noisepattern(vec2(0.9347 * floor(fma(ftime, 0.5, 0.5)), -0.2533282 * floor(fma(ftime, 0.5, 0.5))))) * 0.8 + 0.1 - drop;
 		rainlens += gen_circular_lens(fract(pos), 0.023) * gen * rainStrength;
 		/*--------------------------------*/
 		gen = 1.0 - fract((ftime + 1.5) * 0.5);
-		pos = (noisepattern(vec2(0.785282 * floor(ftime * 0.5 + 0.75), -0.285282 * floor(ftime * 0.5 + 0.75)))) * 0.8 + 0.1- drop;
+		pos = (noisepattern(vec2(0.785282 * floor(fma(ftime, 0.5, 0.75)), -0.285282 * floor(fma(ftime, 0.5, 0.75))))) * 0.8 + 0.1- drop;
 		rainlens += gen_circular_lens(fract(pos), 0.03) * gen * rainStrength;
 		/*--------------------------------*/
 		gen =  1.0 - fract(ftime * 0.5);

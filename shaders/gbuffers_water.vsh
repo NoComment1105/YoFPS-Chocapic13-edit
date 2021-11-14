@@ -42,7 +42,6 @@ const float PI = 3.1415927;
 
 void main() {
 
-    //vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
     vec4 position = gl_ModelViewMatrix * gl_Vertex;
     iswater = 0.0f;
     float displacement = 0.0;
@@ -79,33 +78,6 @@ void main() {
 
     gl_FogFragCoord = gl_Position.z;
 
-    tangent = vec3(0.0);
-    binormal = vec3(0.0);
-    normal = normalize(gl_NormalMatrix * normalize(gl_Normal));
+    normal = normalize(gl_NormalMatrix * gl_Normal);
 
-    if (gl_Normal.x > 0.5) {
-        //  1.0,  0.0,  0.0
-        tangent  = normalize(gl_NormalMatrix * vec3(0.0, 0.0, -1.0));
-        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    } else if (gl_Normal.x < -0.5) {
-        // -1.0,  0.0,  0.0
-        tangent  = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
-        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    } else if (gl_Normal.y > 0.5) {
-        //  0.0,  1.0,  0.0
-        tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
-        binormal = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
-    } else if (gl_Normal.y < -0.5) {
-        //  0.0, -1.0,  0.0
-        tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
-        binormal = normalize(gl_NormalMatrix * vec3(0.0, 0.0, 1.0));
-    } else if (gl_Normal.z > 0.5) {
-        //  0.0,  0.0,  1.0
-        tangent  = normalize(gl_NormalMatrix * vec3(1.0, 0.0, 0.0));
-        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    } else if (gl_Normal.z < -0.5) {
-        //  0.0,  0.0, -1.0
-        tangent  = normalize(gl_NormalMatrix * vec3(-1.0, 0.0, 0.0));
-        binormal = normalize(gl_NormalMatrix * vec3(0.0, -1.0, 0.0));
-    }
 }
