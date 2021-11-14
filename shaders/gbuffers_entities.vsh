@@ -1,4 +1,4 @@
-#version 410 compatibility
+#version 400 compatibility
 
 /*
 !! DO NOT REMOVE !!

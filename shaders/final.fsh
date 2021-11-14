@@ -1,4 +1,4 @@
-#version 410 compatibility
+#version 400 compatibility
 #define MAX_COLOR_RANGE 48.0
 const int RGB16 = 3;
 const int gnormalFormat = RGB16;
@@ -256,7 +256,7 @@ vec3 skyGradient (vec3 fposition, vec3 color, vec3 fogclr) {
 	const float start = 0.0;
 	float rainFog = 1.0 + 4.0 * rainStrength;
 	
-	float fog = min(exp(-length(fposition) / density / fma(sunVisibility, 0.7, 0.3) * rainFog) + start * sunVisibility * (1 - rainStrength), 1.0);
+	float fog = min(exp(-length(fposition) / density / fma(fma(sunVisibility, 0.7, 0.3), rainFog, start)) * sunVisibility * (1 - rainStrength), 1.0);
 	
 	vec3 fc = fogclr;
 	return mix(fc, color, fog);		
@@ -341,7 +341,7 @@ float waterH(vec3 posxz) {
 	float d = length(vec2(fpx, fpy));
 
 	for (int i = 0; i < 3; i++) {
-		wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
+		wave -= d * factor * cos((1 / factor) * px * py * size + 0.5 * frameTimeCounter * speed);
 		factor /= 2;
 	}
 
@@ -356,8 +356,8 @@ float waterH(vec3 posxz) {
 	float wave2 = 0.0;
 
 	for (int i = 0; i < 3; i++) {
-		wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-		factor /= 2.5;
+		wave2 -= d * factor * cos((1 / factor) * px * py * size + 0.75 * frameTimeCounter * speed);
+		factor /= 2;
 	}
 
 	return amplitude * wave2 + amplitude * wave;

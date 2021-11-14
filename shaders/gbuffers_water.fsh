@@ -48,48 +48,6 @@ float rainx = clamp(rainStrength, 0.0f, 1.0f) / 1.0f;
 vec2 dx = dFdx(texcoord.xy);
 vec2 dy = dFdy(texcoord.xy);
 
-float wave(float n) {
-	return sin(2 * PI * (n));
-}
-
-float waterH(vec3 posxz) {
-
-	float wave = 0.0;
-
-	float factor = 1.0;
-	float amplitude = 0.2;
-	float speed = 4.0;
-	float size = 0.2;
-
-	float px = posxz.x / 50.0 + 250.0;
-	float py = posxz.z / 50.0 + 250.0;
-
-	float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-	float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
-
-	float d = length(vec2(fpx, fpy));
-
-	for (int i = 0; i < 3; i++) {
-		wave -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-		factor /= 2;
-	}
-
-	factor = 1.0;
-	px = -posxz.x / 50.0 + 250.0;
-	py = -posxz.z / 150.0 - 250.0;
-
-	fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-	fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
-
-	d = length(vec2(fpx, fpy));
-	float wave2 = 0.0;
-	for (int i = 0; i < 3; i++) {
-		wave2 -= d * factor * cos((1 / factor) * px * py * size + 1.0 * frameTimeCounter * speed);
-		factor /= 2.2;
-	}
-
-	return amplitude * wave2 + amplitude * wave;
-}
 
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////
