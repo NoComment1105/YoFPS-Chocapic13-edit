@@ -162,8 +162,7 @@ void main() {
 	//////////////////// END OF WAVING OBJECTS ////////////////////
 
 	float translucent = 1.0;
-	if (mc_Entity.x == ENTITY_LEAVES || mc_Entity.x == ENTITY_VINES || mc_Entity.x == ENTITY_FLOWERS || mc_Entity.x == 30.0 || mc_Entity.x == 175.0	
-	|| mc_Entity.x == 115.0 || mc_Entity.x == 32.0) {
+	if (mc_Entity.x == ENTITY_LEAVES || mc_Entity.x == ENTITY_VINES || mc_Entity.x == ENTITY_FLOWERS || mc_Entity.x == ENTITY_GRASS) {
 		mat = 0.2;
 		translucent = 0.5;
 	}

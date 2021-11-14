@@ -99,7 +99,7 @@ uniform mat4 shadowModelView;
 ////////////////////sunlight color////////////////////
 ////////////////////sunlight color////////////////////
 ////////////////////sunlight color////////////////////
-const ivec4 ToD[25] = ivec4[25](
+const ivec4 ToD[24] = ivec4[24](
     ivec4(0, 200, 134, 48), //hour,r,g,b
     ivec4(1, 200, 134, 48),
     ivec4(2, 200, 134, 52),
@@ -123,11 +123,9 @@ const ivec4 ToD[25] = ivec4[25](
     ivec4(20, 200, 134, 56),
     ivec4(21, 200, 134, 54),
     ivec4(22, 200, 134, 52),
-    ivec4(23, 200, 134, 48),
-    ivec4(24, 200, 134, 48)
+    ivec4(23, 200, 134, 48)
 );
 
-vec3 sky_color = ivec3(60, 170, 255) / 255.0;
 /*--------------------------------*/
 
 vec3 getSkyColor(vec3 fposition) {

@@ -21,7 +21,7 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
 //----------Lighting----------//
 	#define DYNAMIC_HANDLIGHT
 	
-	#define SUNLIGHTAMOUNT 1.0				//change sunlight strength , see .vsh for colors. /1.7 is default
+	#define SUNLIGHTAMOUNT 1.7				//change sunlight strength , see .vsh for colors. /1.7 is default
 	
 	#define TORCH_COLOR_LIGHTING 3.5, 3.0, 3.0 	//Torch Color RGB - Red, Green, Blue
 		#define TORCH_INTENSITY 8				//torch light intensity
@@ -82,9 +82,9 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
 			*/
 
 //tonemapping constants			
-float A = 0.75;		
-float B = 0.6;		
-float C = 0.11;	
+float A = 1.1;		
+float B = 0.4;		
+float C = 0.1;	
 
 
 
@@ -249,8 +249,6 @@ vec3 drawSun(vec3 fposition, vec3 color, int land) {
 }
 
 
-
-
 vec3 skyGradient (vec3 fposition, vec3 color, vec3 fogclr) {
 	const float density = 1500.0;
 	const float start = 0.0;
@@ -269,7 +267,7 @@ float getAirDensity (float h) {
 }
 
 vec3 calcFog(vec3 fposition, vec3 color, vec3 fogclr) {
-	float density = 5000. + max(1500 * (1 - (abs(worldTime - 6000) / 6000.0)), 0.0) * (1.4 - rainStrength) - rainStrength * 3000;
+	float density = 5000. + max(1500 * (1 - (abs(worldTime - 6000) / 6000.0)), 0.0) * (1.05 - rainStrength) - rainStrength * 3000;
 	/*--------------------------------*/
 	vec3 worldpos = (gbufferModelViewInverse * vec4(fposition, 1.0)).rgb + cameraPosition;
 	float d = length(fposition);
@@ -452,7 +450,7 @@ void main() {
 	vec3 aux = texture2D(gaux1, newTC).rgb;
 
 	int land = int(aux.g < 0.000001);
-	int iswater = int(aux.g > 0.04 && aux.g < 0.07);
+	float iswater = float(aux.g > 0.04 && aux.g < 0.07);
 	int hand  = int(aux.g > 0.905 && aux.g < 0.915);
 	float translucent = float(aux.g > 0.19 && aux.g < 0.21);
 	
@@ -525,7 +523,8 @@ void main() {
 	vec3 uVec = fragpos.xyz - uPos;
 	float UNdotUP = abs(dot(normalize(uVec), normal));
 	float depth = length(uVec) * UNdotUP;
-	float sky_absorbance = mix(mix(1.0, exp(-depth / 2.5) * 0.4, iswater), 1.0, isEyeInWater);
+	float isEyeInWaterFloat = isEyeInWater;
+	float sky_absorbance = mix(mix(1.0, exp(-depth / 2.5) * 0.4, iswater), 1.0, isEyeInWaterFloat);
 	
 	vec3 sun_light = lc * pow(aux.r, 8.0) * 2. * (1.1 - rainStrength * 0.95);
 	vec3 skylight = skycolor * sky_lightmap * 0.05;
