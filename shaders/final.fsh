@@ -248,9 +248,6 @@ vec3 drawSun(vec3 fposition, vec3 color, int land) {
 
 }
 
-
-
-
 vec3 skyGradient (vec3 fposition, vec3 color, vec3 fogclr) {
 	const float density = 1500.0;
 	const float start = 0.0;
@@ -376,6 +373,26 @@ vec3 underwaterFog(float depth, vec3 color) {
 	
 	vec3 c = mix(color * Ucolor, color, fog);
 	vec3 fc = Ucolor * length(ambient_color) * 0.05;
+	return mix(fc, c, fog);
+}
+
+vec3 underlavaFog(float depth, vec3 color) {
+	const float density = 0.75;
+	float fog = exp(-depth / density);
+	vec3 Ucolor= normalize(pow(vec3(1, 0.2, 0.1), vec3(3))) * (sqrt(5.0));
+	
+	vec3 c = mix(color * Ucolor, color, fog);
+	vec3 fc = Ucolor * length(ambient_color) * 0.05;
+	return mix(fc, c, fog);
+}
+
+vec3 undersnowFog(float depth, vec3 color) {
+	const float density = 0.75;
+	float fog = exp(-depth / density);
+	vec3 Ucolor= normalize(pow(vec3(0.75, 0.9, 1), vec3(4.2))) * (sqrt(3.0));
+	
+	vec3 c = mix(color * Ucolor, color, fog);
+	vec3 fc = Ucolor * length(ambient_color) * 0.07;
 	return mix(fc, c, fog);
 }
 
@@ -567,11 +584,14 @@ void main() {
 		color.rgb = skyGradient(fragpos.xyz, color.rgb, fogclr);
 		color.rgb = drawSun(fragpos, color.rgb, land);
 	
-	//if (cosT > 0.) color.rgb = drawCloud(fragpos.xyz, color.rgb);
 	}
 	
 	if (isEyeInWater == 1) { 
 		color.rgb = underwaterFog(length(fragpos), color.rgb); 
+	} else if (isEyeInWater == 2) {
+		color.rgb = underlavaFog(length(fragpos), color.rgb);
+	} else if (isEyeInWater == 3) {
+		color.rgb = undersnowFog(length(fragpos), color.rgb);
 	}
 
 
