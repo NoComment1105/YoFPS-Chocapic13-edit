@@ -59,6 +59,10 @@ void main() {
 	
 	vec4 tex = vec4((watercolor * length(texture2D(texture, texcoord.xy).rgb * color.rgb) * color).rgb, watercolor.a);
 	
+	if (iswater < 0.9) {
+		tex = texture2D(texture, texcoord.xy) * color;
+	}
+	
 	vec4 frag2;
 		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);
 		
