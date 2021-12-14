@@ -2,6 +2,7 @@
 #define MAX_COLOR_RANGE 48.0
 const int RGB16 = 3;
 const int gnormalFormat = RGB16;
+
 /*
 !! DO NOT REMOVE !!
 This code is from Chocapic13' shaders
@@ -19,67 +20,34 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
 //////////////////////////////ADJUSTABLE VARIABLES
  
 //----------Lighting----------//
-	#define DYNAMIC_HANDLIGHT
 	
-	#define SUNLIGHTAMOUNT 1.7				//change sunlight strength , see .vsh for colors. /1.7 is default
-	
-	#define TORCH_COLOR_LIGHTING 3.5, 3.0, 3.0 	//Torch Color RGB - Red, Green, Blue
-		#define TORCH_INTENSITY 8				//torch light intensity
-	//Minecraft lightmap (used for sky)
-	#define ATTENUATION 1.45
-	#define MIN_LIGHT 0.01
+#define TORCH_COLOR_LIGHTING 3.5, 3.0, 3.0 	//Torch Color RGB - Red, Green, Blue
+
+#define TORCH_INTENSITY 8					//torch light intensity
+
+//Minecraft lightmap (used for sky)
+
+#define ATTENUATION 1.45
+
+#define MIN_LIGHT 0.01
 //----------End of Lighting----------//
 
 //----------Visual----------//
 
-	
-	//#define CELSHADING
-		#define BORDER 1.0
+//#define CELSHADING
 
-	const float	sunPathRotation	= -40.0f;		//determines sun/moon inclination /-40.0 is default - 0.0 is normal rotation
+#define BORDER 1.0
+
+const float	sunPathRotation	= -40.0f;		//determines sun/moon inclination /-40.0 is default - 0.0 is normal rotation
 //----------End of Visual----------//
-
 
 //#define VIGNETTE
 #define VIGNETTE_STRENGTH 0.72	//default 0.72
 #define VIGNETTE_START 0.1		//distance from the center of the screen where the vignette effect start (0-1), default 0.1
 #define VIGNETTE_END 0.7		//distance from the center of the screen where the vignette effect end (0-1), bigger than VIGNETTE_START, default 0.7
-  
-//#define LENS_EFFECTS			
-	#define LENS_STRENGTH 1.5		//default 1.5
-	
+
+
 //#define RAIN_DROPS
-
-
-//#define DOF							//enable depth of field (blur on non-focused objects)
-	//#define HEXAGONAL_BOKEH			//disabled : circular blur shape - enabled : hexagonal blur shape
-	//#define DISTANT_BLUR				//constant
-			//lens properties
-			const float focal = 0.024;
-			float aperture = 0.009;	
-			const float sizemult = 100.0;
-			/*
-			Try different setting by replacing the values above by the values here or use your own settings
-			----------------------------------
-			"Near to human eye (for gameplay,default)":
-
-			const float focal = 0.024;
-			float aperture = 0.009;	
-			const float sizemult = 100.0;
-			----------------------------------
-			"Tilt shift (cinematics)":
-
-			const float focal = 0.3;
-			float aperture = 0.3;	
-			const float sizemult = 1.0;
-			----------------------------------
-			"Camera (cinematics)":
-
-			const float focal = 0.05;
-			float aperture = focal/7.0;	
-			const float sizemult = 100.0;
-			---------------------------------- 
-			*/
 
 //tonemapping constants			
 float A = 1.1;		
@@ -87,11 +55,9 @@ float B = 0.4;
 float C = 0.1;	
 
 
-
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
-
 
 
 varying vec4 texcoord;
@@ -102,7 +68,6 @@ varying vec3 moonVec;
 varying vec3 upVec;
 
 varying vec4 lightS;
-
 
 varying vec3 sunlight;
 varying vec3 moonlight;
@@ -115,7 +80,6 @@ varying float SdotU;
 varying float MdotU;
 varying float sunVisibility;
 varying float moonVisibility;
-
 
 uniform sampler2D noisetex;
 uniform sampler2D gnormal;
@@ -194,7 +158,7 @@ vec3 getSkyColor(vec3 fposition) {
 	vec3 nsunlight = normalize(pow(sunlight, vec3(2.2)) * vec3(1, 0.9, 0.8));
 	vec3 sVector = normalize(fposition);
 	/*--------------------------------*/
-	sky_color = normalize(mix(sky_color, vec3(0.25, 0.3, 0.45) * length(ambient_color), rainStrength)); //normalize colors in order to don't change luminance
+	sky_color = normalize(mix(sky_color, vec3(0.25, 0.3, 0.45) * length(ambient_color), rainStrength)); //normalize colors in order to not change luminance
 	/*--------------------------------*/
 	float Lz = 1.0;
 	float cosT = dot(sVector, upVec); 
@@ -602,41 +566,6 @@ void main() {
 	vec2 lightPos = pos1 * 0.5 + 0.5;
 	float gr = 0.0;	
 
-#ifdef GODRAYS
-	float truepos = sunPosition.z / abs(sunPosition.z);		//1 -> sun / -1 -> moon
-	vec3 rainc = mix(vec3(1.), fogclr * 1.5, rainStrength);
-	vec3 lightColor = mix(sunlight * sunVisibility * rainc, 4 * moonlight * moonVisibility * rainc, (truepos + 1.0) / 2);
-	/*--------------------------------*/
-	const int nSteps = NUM_SAMPLES;
-	const float blurScale = 0.002 / nSteps * 9.0;
-	const int center = (nSteps - 1) / 2;
-	vec3 blur = vec3(0.0);
-	float tw = 0.0;
-	const float sigma = 0.5;
-	/*--------------------------------*/
-	vec2 deltaTextCoord = normalize(texcoord.st - lightPos.xy) * blurScale;
-	vec2 textCoord = texcoord.st - deltaTextCoord * center;
-	float distx = texcoord.x * aspectRatio - lightPos.x * aspectRatio;
-	float disty = texcoord.y - lightPos.y;
-	float illuminationDecay = pow(max(1.0 - sqrt(distx * distx + disty * disty), 0.0), 4.0);
-	/*--------------------------------*/
-	for(int i=0; i < nSteps ; i++) {
-		textCoord += deltaTextCoord;
-			
-		float dist = (i-float(center)) / center;
-		float weight = exp(-(dist * dist) / (2.0 * sigma));
-			
-		float sample = texture2D(composite, textCoord).r * weight;
-		tw += weight;
-		gr += sample;
-	}
-
-	vec3 grC = mix(lightColor, fogclr, rainStrength) * exposure * (gr / tw) * illuminationDecay * (1 - isEyeInWater);
-	color.xyz = (1 - (1 - color.xyz / 48.0) * (1 - grC.xyz / 48.0)) * 48.0;
-
-#endif
-
-
 /*--------------------------------*/
 //draw rain
 vec4 rain = pow(texture2D(gaux4, texcoord.xy), vec4(vec3(2.2), 1));
@@ -653,37 +582,6 @@ if (length(rain) > 0.0001) {
 /*--------------------------------*/
 
 	
-#ifdef LENS_EFFECTS
-	/*--------------------------------*/
-	float xdist = abs(lightPos.x-newTC.x);
-	float ydist = abs(lightPos.y-newTC.y);
-	/*--------------------------------*/
-	float sunvisibility = texture2D(composite, vec2(pw, ph)).a * (1 - rainStrength * 0.9);
-	float centerdist = clamp(1.0 - pow(cdist(lightPos), 0.2), 0.0, 1.0);
-	/*--------------------------------*/
-	vec3 light_color = mix(sunlight * sunVisibility, 3 * moonlight * moonVisibility, (truepos + 1.0) / 2.);
-	/*--------------------------------*/
-	if (sunvisibility > 0.05) {
-		vec3 lensColor = exp(-ydist * ydist / 0.003 / (1.5 - centerdist)) * exp(-xdist * xdist / 0.05 / (1.5 - centerdist)) * vec3(0.1, 0.3, 1.0);
-		/*--------------------------------*/
-		vec2 LC = vec2(0.5) - lightPos;
-		/*--------------------------------*/
-		vec2 pos1 = lightPos + LC * 0.7;
-		lensColor += vec3(1.0, 0.3, .1) * gen_circular_lens(vec2(pos1), 0.03 * (1.5 - centerdist)) * 0.58;
-		/*--------------------------------*/
-		pos1 = lightPos + LC * 0.9;
-		lensColor += vec3(0.8, 0.6, .1) * gen_circular_lens(vec2(pos1), 0.06 * (1.5 - centerdist)) * 0.375;
-		/*--------------------------------*/
-		pos1 = lightPos + LC * 1.3;
-		lensColor += vec3(0.1, 1.0, .3) * gen_circular_lens(vec2(pos1), 0.12 * (1.5 - centerdist)) * 0.28;
-		/*--------------------------------*/
-		pos1 = lightPos + LC * 2.1;
-		lensColor += vec3(0.1, 0.6, .8) * gen_circular_lens(vec2(pos1), 0.24 * (1.5 - centerdist)) * 0.21;
-		/*--------------------------------*/
-		lensColor = lensColor * pow(sunvisibility, 2.2) * light_color * LENS_STRENGTH * centerdist;
-		color += lensColor;
-	}
-#endif
 
 /*--------------------------------*/
 vec3 curr = Uncharted2Tonemap(color);
@@ -704,7 +602,6 @@ color = (((color - avg) * saturation) + avg) ;
 	/*--------------------------------*/
 	color = color * (1 + vignette) * 0.5;
 #endif	
-
 
 gl_FragColor = vec4(color, 1.0);
 }

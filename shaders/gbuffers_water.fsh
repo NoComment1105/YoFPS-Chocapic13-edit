@@ -12,18 +12,12 @@ Read the terms of modification and sharing before changing something below pleas
 //////////////////////////////ADJUSTABLE VARIABLES
 //////////////////////////////ADJUSTABLE VARIABLES
 
-	#define MIX_TEX 0.7	
-	vec4 watercolor = vec4(0.09, 0.7, 0.625, 0.15); 	//water color and opacity (r,g,b,opacity)
+vec4 watercolor = vec4(0.09, 0.7, 0.625, 0.15); 	//water color and opacity (r,g,b,opacity)
 
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 
-const int   MAX_OCCLUSION_POINTS   = 20;
-const float MAX_OCCLUSION_DISTANCE = 100.0;
-const float bump_distance          = 32.0;		//Bump render distance: tiny = 32, short = 64, normal = 128, far = 256
-const float pom_distance           = 32.0;		//POM render distance: tiny = 32, short = 64, normal = 128, far = 256
-const float fademult               = 0.1;
 const float PI                     = 3.1415927;
 
 varying vec4 color;
