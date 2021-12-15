@@ -1,5 +1,4 @@
-
-#version 150
+#version 120
 
 
 /*
@@ -49,8 +48,11 @@ Not respecting these rules can and will result in a request of thread/download s
 Disable an effect by putting "//" before "#define" when there is no number after
 You can tweak the numbers, the impact on the shaders is self-explained in the variable's name or in a comment
 */
-
-//go to line 46 for changing sunlight color and ambient color line 89 for moon light color
 /*--------------------------------*/
+varying vec2 texcoord;
+varying vec4 glcolor;
 
-void main() {}
+void main() {
+	gl_Position = ftransform();
+	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+}

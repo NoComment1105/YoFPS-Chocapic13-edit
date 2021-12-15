@@ -26,6 +26,9 @@ screen.WAVING_SPEEDS.comment = Adjust the speed at which entities wave
 option.RAIN_DROPS = Toggle Rain Drops
 option.RAIN_DROPS.comment = Toggle wheather rain drops fall down your camera during rain
 
+option.HANDHELD_LIGHT = Toggle Dynamic hand lighting
+option.HANDHELD_LIGHT.comment = Toggle wheather lighting blocks produce light when held in hand
+
 option.WAVING_FIRE = Toggle Waving Fire
 option.WAVING_FIRE.comment = Toggle wheather fire waves
 option.WAVING_FLOWERS = Toggle Waving Flowers

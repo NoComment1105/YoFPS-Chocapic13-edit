@@ -7,10 +7,7 @@ Read the terms of modification and sharing before changing something below pleas
 !! DO NOT REMOVE !!
 */
 
-//disabling is done by adding "//" to the beginning of a line.
-
-
-//#define WAVING_WATER
+#include "/lib/common.glsl"
 
 #define WATER 7.0 //Define water in block.properties
 

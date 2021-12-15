@@ -7,27 +7,7 @@ Read the terms of modification and sharing before changing something below pleas
 !! DO NOT REMOVE !!
 */
 
-//////////////////////////////ADJUSTABLE VARIABLES
-//////////////////////////////ADJUSTABLE VARIABLES
-//////////////////////////////ADJUSTABLE VARIABLES
-
-#define WAVING_GRASS
-#define WAVING_FLOWERS
-#define WAVING_LEAVES
-#define WAVING_FUNGI
-#define WAVING_VINES
-#define WAVING_FIRE
-
-#define GRASS_WAVE_SPEED   1.2   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
-#define FLOWERS_WAVE_SPEED 0.7   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
-#define LEAVES_WAVE_SPEED  0.7  //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
-#define FUNGI_WAVE_SPEED   0.7   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
-#define VINES_WAVE_SPEED   0.7  //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
-#define FIRE_WAVE_SPEED    1.1   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
-
-//////////////////////////////END OF ADJUSTABLE VARIABLES
-//////////////////////////////END OF ADJUSTABLE VARIABLES
-//////////////////////////////END OF ADJUSTABLE VARIABLES
+#include "/lib/common.glsl"
 
 #define ENTITY_GRASS	 1.0  // Includes short and tall grass, fern and nether roots
 #define ENTITY_FLOWERS	 2.0  // All flowers in minecraft

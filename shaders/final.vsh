@@ -1,6 +1,6 @@
 #version 120
 
-
+#include "/lib/common.glsl"
 /*
 !! DO NOT REMOVE !! !! DO NOT REMOVE !!
 
@@ -91,8 +91,6 @@ uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferModelView;
 uniform mat4 shadowProjection;
 uniform mat4 shadowModelView;
-
-#define HANDHELD_LIGHT
 
 /*--------------------------------*/
 ////////////////////sunlight color////////////////////
