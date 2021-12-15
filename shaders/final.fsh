@@ -279,47 +279,6 @@ float subSurfaceScattering2(vec3 vec,vec3 pos, float N) {
 	return pow(max(dot(vec, normalize(pos)) * 0.5 + 0.5, 0.0), N) * (N + 1) / 6.28;
 }
 
-float waterH(vec3 posxz) {
-
-	float wave = 0.0;
-
-
-	float factor = 1.0;
-	float amplitude = 0.2;
-	float speed = 4.0;
-	float size = 0.2;
-
-	float px = posxz.x / 50.0 + 250.0;
-	float py = posxz.z / 50.0 + 250.0;
-
-	float fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-	float fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
-
-	float d = length(vec2(fpx, fpy));
-
-	for (int i = 0; i < 3; i++) {
-		wave -= d * factor * cos((1 / factor) * px * py * size + 0.5 * frameTimeCounter * speed);
-		factor /= 2;
-	}
-
-	factor = 1.0;
-	px = -posxz.x / 50.0 + 250.0;
-	py = -posxz.z / 150 - 250.0;
-
-	fpx = abs(fract(px * 20.0) - 0.5) * 2.0;
-	fpy = abs(fract(py * 20.0) - 0.5) * 2.0;
-
-	d = length(vec2(fpx, fpy));
-	float wave2 = 0.0;
-
-	for (int i = 0; i < 3; i++) {
-		wave2 -= d * factor * cos((1 / factor) * px * py * size + 0.75 * frameTimeCounter * speed);
-		factor /= 2;
-	}
-
-	return amplitude * wave2 + amplitude * wave;
-}
-
 vec3 alphablend(vec3 c, vec3 ac, float a) {
 	vec3 n_ac = normalize(ac) * (1 / sqrt(3.));
 	vec3 nc = sqrt(c * n_ac);
@@ -421,8 +380,7 @@ void main() {
 		}
 	#endif
 
-	vec2 fake_refract = vec2(sin(frameTimeCounter + texcoord.x * 100.0 + texcoord.y * 50.0), cos(frameTimeCounter + texcoord.y * 100.0 + texcoord.x * 50.0)) ;
-	vec2 newTC = texcoord.st ; //refract turned off in ltie version because of a strange bug
+	vec2 newTC = texcoord.st;
 
 	/*--------------------------------*/
 
@@ -447,37 +405,8 @@ void main() {
 	vec3 fogclr = getSkyColor(fragpos.xyz);
 
 
-	vec4 worldposition = gbufferModelViewInverse * vec4(fragpos, 1.0);	
-	
-	
-	if (iswater > 0.9) {
-		vec3 posxz = worldposition.xyz + cameraPosition;
-		posxz.x += sin(posxz.z + frameTimeCounter) * 0.25;
-		posxz.z += cos(posxz.x + frameTimeCounter * 0.5) * 0.25;
-	
-		float deltaPos = 0.4;
-		float h0 = waterH(posxz);
-		float h1 = waterH(posxz - vec3(deltaPos, 0.0, 0.0));
-		float h2 = waterH(posxz - vec3(0.0, 0.0, deltaPos));
-	
-		float dX = ((h0 - h1)) / deltaPos;
-		float dY = ((h0 - h2)) / deltaPos;
-	
-		float nX = sin(atan(dX));
-		float nY = sin(atan(dY));
-	
-		vec3 refract = normalize(vec3(nX, nY, 1.0));
-
-		float refMult = 0.005 - dot(normal, normalize(fragpos).xyz) * 0.003;
-
-		float mask = texture2D(gaux1, newTC.st + refract.xy*refMult).g;
-		mask =  float(mask > 0.04 && mask < 0.07);
-		newTC = (newTC.st + refract.xy*refMult)*mask + newTC.xy*(1-mask);
-
-	}
-
 	float uDepth = texture2D(depthtex0, newTC.xy).x;
-	vec4 t  = (gbufferProjectionInverse * vec4(vec3(newTC.xy,uDepth) * 2.0 - 1.0, 1.0));	
+	vec4 t  = (gbufferProjectionInverse * vec4(vec3(newTC.xy, uDepth) * 2.0 - 1.0, 1.0));	
 	vec3 uPos = t.xyz / t.w;
 	vec3 color = pow(texture2D(gcolor, newTC).rgb, vec3(2.2));
 	color = color * (1.0 + translucent * 0.3);
@@ -503,7 +432,7 @@ void main() {
 	vec3 uVec = fragpos.xyz - uPos;
 	float UNdotUP = abs(dot(normalize(uVec), normal));
 	float depth = length(uVec) * UNdotUP;
-	float isEyeInWaterFloat = isEyeInWater;
+	float isEyeInWaterFloat = isEyeInWater;  // This is necessary for this due to Mesa being weird and allowing int, but other drivers not
 	float sky_absorbance = mix(mix(1.0, exp(-depth / 2.5) * 0.4, iswater), 1.0, isEyeInWaterFloat);
 	
 	vec3 sun_light = lc * pow(aux.r, 8.0) * 2. * (1.1 - rainStrength * 0.95);
