@@ -18,12 +18,12 @@ Read the terms of modification and sharing before changing something below pleas
 #define WAVING_VINES
 #define WAVING_FIRE
 
-float GRASS_WAVE_SPEED   = 1.2;   // DEFAULT: 1.2
-float FLOWERS_WAVE_SPEED = 0.7;   // DEFAULT: 0.7
-float LEAVES_WAVE_SPEED  = 0.75;  // DEFAULT: 0.75
-float FUNGI_WAVE_SPEED   = 0.7;   // DEFAULT: 0.7
-float VINES_WAVE_SPEED   = 0.75;  // DEFAULT: 0.75 (I reccomend this is the same as leaves, or there is <0.2 difference in value)
-float FIRE_WAVE_SPEED    = 1.1;   // DEFAULT: 1.0
+#define GRASS_WAVE_SPEED   1.2   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define FLOWERS_WAVE_SPEED 0.7   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define LEAVES_WAVE_SPEED  0.7  //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define FUNGI_WAVE_SPEED   0.7   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define VINES_WAVE_SPEED   0.7  //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define FIRE_WAVE_SPEED    1.1   //[0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
 
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES

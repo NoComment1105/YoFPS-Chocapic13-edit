@@ -59,7 +59,6 @@ varying vec3 upVec;
 
 varying vec4 lightS;
 
-
 varying vec3 sunlight;
 varying vec3 moonlight;
 varying vec3 ambient_color;

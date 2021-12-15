@@ -1,21 +1,62 @@
-screen.C=§cYoFPS §bShaders
-screen.S=Settings
-screen.S.comment=Manage visual settings
-screen.WAVING=Waving Objects
-screen.WAVING.comment=Toggle waving plants, flowers etc.
-screen.EFFECTS=Effects
-screen.EFFECTS.comment=Toggle effects like Lens Flares
+#shader/lang/en_US.lang
 
-option.RAIN_DROPS=Rain Drops
-option.RAIN_DROPS.comment=Turn on/off rain drops on camera
+# Profiles
+profile.LOW = Low
+profile.NORMAL = Normal
+profile.HIGH = High
+profile.comment = Low: Most effects disabled, Highest Performace. Normal: Regular effects, Average Performace. High: More effects, Reduced Performace
 
-option.WAVING_FIRE=Waving Fire
-option.WAVING_WATER=3D Waves
-option.WAVING_GRASS=Waving Grass
-option.WAVING_WHEAT=Waving Wheat
-option.WAVING_FLOWERS=Waving Flowers
-option.WAVING_VINES=Waving Vines
+# Screens
+screen.CREDITS = YoFPS Shaders By NoComment1105
+screen.CREDITS.comment = A Chocapic13 v5 edit, original created my MlgImposter. I would like to thank him for giving me ownership of this pack, to help me get into shader programming
 
+screen.EFFECTS = Effects
+screen.EFFECTS.comment = Toggle and control the strength of effects
 
+screen.VIGNETTE = Vignette
+screen.VIGNETTE.comment = Toggle and configure the Vignette
 
+screen.WAVING = Waving 
+screen.WAVING.comment = Toggle what waves and what doesn't
 
+screen.WAVING_SPEEDS = Waving Speeds
+screen.WAVING_SPEEDS.comment = Adjust the speed at which entities wave
+
+# Options
+option.RAIN_DROPS = Toggle Rain Drops
+option.RAIN_DROPS.comment = Toggle wheather rain drops fall down your camera during rain
+
+option.WAVING_FIRE = Toggle Waving Fire
+option.WAVING_FIRE.comment = Toggle wheather fire waves
+option.WAVING_FLOWERS = Toggle Waving Flowers
+option.WAVING_FLOWERS.comment = Toggle wheather flowers wave
+option.WAVING_FUNGI = Toggle Waving Fungi
+option.WAVING_FUNGI.comment = Toggle wheather fungi waves
+option.WAVING_GRASS = Toggle Waving Grass
+option.WAVING_GRASS.comment = Toggle wheather grass waves
+option.WAVING_LEAVES = Toggle Waving Leaves
+option.WAVING_LEAVES.comment = Toggle wheather leaves wave
+option.WAVING_VINES = Toggle Waving Vines
+option.WAVING_VINES.comment = Toggle wheather vines wave
+
+option.FIRE_WAVE_SPEED = Fire Waving Speed
+option.FIRE_WAVE_SPEED.comment = Adjust the speed that fire waves at
+option.FLOWERS_WAVE_SPEED = Flower Waving Speed
+option.FLOWERS_WAVE_SPEED.comment = Adjust the speed that flowers wave at
+option.FUNGI_WAVE_SPEED = Fungi Waving Speed
+option.FUNGI_WAVE_SPEED.comment = Adjust the speed that fungi wave at
+option.GRASS_WAVE_SPEED = Grass Waving Speed
+option.GRASS_WAVE_SPEED.comment = Adjust the speed that grass waves at
+option.LEAVES_WAVE_SPEED = Leaves Waving Speed
+option.LEAVES_WAVE_SPEED.comment = Adjust the speed that leaves wave at
+option.VINES_WAVE_SPEED = Vines Waving Speed
+option.VINES_WAVE_SPEED.comment = Adjust the speed that vines wave at
+
+option.VIGNETTE = Toggle Vignette
+option.VIGNETTE.comment = Toggle the Vignette
+option.VIGNETTE_STRENGTH = Vignette Strength
+option.VIGNETTE_STRENGTH.comment = Adjust the strength of the Vignette
+option.VIGNETTE_START = Vignette Start
+option.VIGNETTE_START.comment = Adjust where the Vignette starts
+option.VIGNETTE_END = Vignette End
+option.VIGNETTE_END.comment = Adjust where the Vignette ends

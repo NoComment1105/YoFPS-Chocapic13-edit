@@ -21,38 +21,34 @@ You can tweak the numbers, the impact on the shaders is self-explained in the va
  
 //----------Lighting----------//
 	
-#define TORCH_COLOR_LIGHTING 3.5, 3.0, 3.0 	//Torch Color RGB - Red, Green, Blue
+#define TORCH_COLOR_LIGHTING 3.5, 3.0, 3.0 	// Torch Color RGB - Red, Green, Blue
 
-#define TORCH_INTENSITY 8					//torch light intensity
+#define TORCH_INTENSITY 8					//[6 7 8 9 10 11 12]
 
 //Minecraft lightmap (used for sky)
 
 #define ATTENUATION 1.45
 
-#define MIN_LIGHT 0.01
 //----------End of Lighting----------//
 
 //----------Visual----------//
 
-//#define CELSHADING
-
-#define BORDER 1.0
-
 const float	sunPathRotation	= -40.0f;		//determines sun/moon inclination /-40.0 is default - 0.0 is normal rotation
+
 //----------End of Visual----------//
 
 //#define VIGNETTE
-#define VIGNETTE_STRENGTH 0.72	//default 0.72
-#define VIGNETTE_START 0.1		//distance from the center of the screen where the vignette effect start (0-1), default 0.1
-#define VIGNETTE_END 0.7		//distance from the center of the screen where the vignette effect end (0-1), bigger than VIGNETTE_START, default 0.7
+#define VIGNETTE_STRENGTH 0.7	//[0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0]
+#define VIGNETTE_START 0.45		//[0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7]
+#define VIGNETTE_END 0.9		//[0.75 0.8 0.85 0.9 0.95 1.0]
 
 
 //#define RAIN_DROPS
 
 //tonemapping constants			
-float A = 1.1;		
-float B = 0.4;		
-float C = 0.1;	
+const float A = 1.1;		
+const float B = 0.4;		
+const float C = 0.1;	
 
 
 //////////////////////////////END OF ADJUSTABLE VARIABLES
@@ -225,7 +221,7 @@ vec3 skyGradient (vec3 fposition, vec3 color, vec3 fogclr) {
 
 }
 
-float getAirDensity (float h) {
+float getAirDensity(float h) {
 	return min((pow((max((h), 58.0) - 58.0) / 30, 2.0) * 20.0 + 10.0), 35.0);
 }
 
@@ -333,7 +329,7 @@ vec3 alphablend(vec3 c, vec3 ac, float a) {
 vec3 underwaterFog(float depth, vec3 color) {
 	const float density = 48.0;
 	float fog = exp(-depth / density);
-	vec3 Ucolor= normalize(pow(vec3(0.1, 0.4, 0.6), vec3(2.2))) * (sqrt(3.0));
+	vec3 Ucolor = normalize(pow(vec3(0.1, 0.4, 0.6), vec3(2.2))) * (sqrt(3.0));
 	
 	vec3 c = mix(color * Ucolor, color, fog);
 	vec3 fc = Ucolor * length(ambient_color) * 0.05;
@@ -343,7 +339,7 @@ vec3 underwaterFog(float depth, vec3 color) {
 vec3 underlavaFog(float depth, vec3 color) {
 	const float density = 0.75;
 	float fog = exp(-depth / density);
-	vec3 Ucolor= normalize(pow(vec3(1, 0.2, 0.1), vec3(3))) * (sqrt(5.0));
+	vec3 Ucolor = normalize(pow(vec3(1, 0.2, 0.1), vec3(3))) * (sqrt(5.0));
 	
 	vec3 c = mix(color * Ucolor, color, fog);
 	vec3 fc = Ucolor * length(ambient_color) * 0.05;
@@ -353,7 +349,7 @@ vec3 underlavaFog(float depth, vec3 color) {
 vec3 undersnowFog(float depth, vec3 color) {
 	const float density = 0.75;
 	float fog = exp(-depth / density);
-	vec3 Ucolor= normalize(pow(vec3(0.75, 0.9, 1), vec3(4.2))) * (sqrt(3.0));
+	vec3 Ucolor = normalize(pow(vec3(0.75, 0.9, 1), vec3(4.2))) * (sqrt(3.0));
 	
 	vec3 c = mix(color * Ucolor, color, fog);
 	vec3 fc = Ucolor * length(ambient_color) * 0.07;
@@ -402,30 +398,32 @@ void main() {
 	float ftime = frameTimeCounter * 2.0 / lifetime;  
 	vec2 drop = vec2(0.0, fract(frameTimeCounter / 20.0));
 	/*--------------------------------*/
-#ifdef RAIN_DROPS
-	if (rainStrength > 0.02) {
-		/*--------------------------------*/
-		float gen = 1.0 - fract((ftime + 0.5) * 0.5);
-		vec2 pos = (noisepattern(vec2(-0.94386347 * floor(fma(ftime, 0.5, 0.25)), floor(fma(ftime, 0.5, 0.25))))) * 0.9 + 0.1 - drop;
-		rainlens += gen_circular_lens(fract(pos), 0.04) * gen * rainStrength;
-		/*--------------------------------*/
-		gen = 1.0 - fract((ftime + 1.0) * 0.5);
-		pos = (noisepattern(vec2(0.9347 * floor(fma(ftime, 0.5, 0.5)), -0.2533282 * floor(fma(ftime, 0.5, 0.5))))) * 0.8 + 0.1 - drop;
-		rainlens += gen_circular_lens(fract(pos), 0.023) * gen * rainStrength;
-		/*--------------------------------*/
-		gen = 1.0 - fract((ftime + 1.5) * 0.5);
-		pos = (noisepattern(vec2(0.785282 * floor(fma(ftime, 0.5, 0.75)), -0.285282 * floor(fma(ftime, 0.5, 0.75))))) * 0.8 + 0.1- drop;
-		rainlens += gen_circular_lens(fract(pos), 0.03) * gen * rainStrength;
-		/*--------------------------------*/
-		gen =  1.0 - fract(ftime * 0.5);
-		pos = (noisepattern(vec2(-0.347 * floor(ftime * 0.5), 0.6847 * floor(ftime * 0.5)))) * 0.8 + 0.1 - drop;
-		rainlens += gen_circular_lens(fract(pos), 0.05) * gen * rainStrength;
-		/*--------------------------------*/
-		rainlens *= clamp((eyeBrightnessSmooth.y - 220) / 15.0, 0.0, 1.0);
-	}
-#endif
+	#ifdef RAIN_DROPS
+		if (rainStrength > 0.02) {
+			/*--------------------------------*/
+			float gen = 0.8 - fract((ftime + 0.5) * 0.5);
+			vec2 pos = (noisepattern(vec2(-0.94386347 * floor(fma(ftime, 0.5, 0.25)), floor(fma(ftime, 0.5, 0.25))))) * 0.9 + 0.1 - drop;
+			rainlens += gen_circular_lens(fract(pos), 0.04) * gen * rainStrength;
+			/*--------------------------------*/
+			gen = 0.8 - fract((ftime + 1.0) * 0.5);
+			pos = (noisepattern(vec2(0.9347 * floor(fma(ftime, 0.5, 0.5)), -0.2533282 * floor(fma(ftime, 0.5, 0.5))))) * 0.8 + 0.1 - drop;
+			rainlens += gen_circular_lens(fract(pos), 0.023) * gen * rainStrength;
+			/*--------------------------------*/
+			gen = 0.8 - fract((ftime + 1.5) * 0.5);
+			pos = (noisepattern(vec2(0.785282 * floor(fma(ftime, 0.5, 0.75)), -0.285282 * floor(fma(ftime, 0.5, 0.75))))) * 0.8 + 0.1- drop;
+			rainlens += gen_circular_lens(fract(pos), 0.03) * gen * rainStrength;
+			/*--------------------------------*/
+			gen =  0.8 - fract(ftime * 0.5);
+			pos = (noisepattern(vec2(-0.347 * floor(ftime * 0.5), 0.6847 * floor(ftime * 0.5)))) * 0.8 + 0.1 - drop;
+			rainlens += gen_circular_lens(fract(pos), 0.05) * gen * rainStrength;
+			/*--------------------------------*/
+			rainlens *= clamp((eyeBrightnessSmooth.y - 220) / 15.0, 0.0, 1.0);
+		}
+	#endif
+
 	vec2 fake_refract = vec2(sin(frameTimeCounter + texcoord.x * 100.0 + texcoord.y * 50.0), cos(frameTimeCounter + texcoord.y * 100.0 + texcoord.x * 50.0)) ;
 	vec2 newTC = texcoord.st ; //refract turned off in ltie version because of a strange bug
+
 	/*--------------------------------*/
 
 	vec3 fragpos = vec3(newTC.st, texture2D(depthtex1, newTC.st).r);
@@ -444,6 +442,7 @@ void main() {
 	if (land > 0.9) { 
 		fragpos = (gbufferModelView * (gbufferModelViewInverse * vec4(fragpos, 1.0) + vec4(.0, max(cameraPosition.y - 70., .0), .0, .0))).rgb; 
 	}
+
 	float cosT = dot(normalize(fragpos), upVec);
 	vec3 fogclr = getSkyColor(fragpos.xyz);
 
@@ -469,10 +468,8 @@ void main() {
 	
 		vec3 refract = normalize(vec3(nX, nY, 1.0));
 
-	
 		float refMult = 0.005 - dot(normal, normalize(fragpos).xyz) * 0.003;
 
-	
 		float mask = texture2D(gaux1, newTC.st + refract.xy*refMult).g;
 		mask =  float(mask > 0.04 && mask < 0.07);
 		newTC = (newTC.st + refract.xy*refMult)*mask + newTC.xy*(1-mask);
@@ -499,7 +496,7 @@ void main() {
 	vec3 lc = mix(pow(sunlight, vec3(2.2)), moonlight, moonVisibility);
 	lc = mix(lc,vec3(length(lc)) * 0.3,rainStrength * 0.9);
 	
-	vec3 Ucolor= normalize(vec3(0.1, 0.4, 0.6));
+	vec3 Ucolor = normalize(vec3(0.1, 0.4, 0.6));
 
 	//we'll suppose water plane have same height above pixel and at pixel water's surface
 	
@@ -566,42 +563,42 @@ void main() {
 	vec2 lightPos = pos1 * 0.5 + 0.5;
 	float gr = 0.0;	
 
-/*--------------------------------*/
-//draw rain
-vec4 rain = pow(texture2D(gaux4, texcoord.xy), vec4(vec3(2.2), 1));
-if (length(rain) > 0.0001) {
-	rain.rgb = normalize(rain.rgb) * 0.001 * (0.5 + length(rain.rgb) * 0.25) * length(ambient_color);
-	color.rgb = ((1 - (1 - color.xyz / 48.0) * (1 - rain.xyz * rain.a)) * 48.0);
-}
-/*--------------------------------*/
+	/*--------------------------------*/
+	//draw rain
+	vec4 rain = pow(texture2D(gaux4, texcoord.xy), vec4(vec3(2.2), 1));
+	if (length(rain) > 0.0001) {
+		rain.rgb = normalize(rain.rgb) * 0.001 * (0.5 + length(rain.rgb) * 0.25) * length(ambient_color);
+		color.rgb = ((1 - (1 - color.xyz / 48.0) * (1 - rain.xyz * rain.a)) * 48.0);
+	}
+	/*--------------------------------*/
 
-#ifdef RAIN_DROPS
-	vec3 c_rain = rainlens * ambient_color * 0.0008;
-	color = (((1 - (1 - color.xyz / 42.0) * (1 - c_rain.xyz)) * 42.0));
-#endif
-/*--------------------------------*/
+	#ifdef RAIN_DROPS
+		vec3 c_rain = rainlens * ambient_color * 0.0008;
+		color = (((1 - (1 - color.xyz / 42.0) * (1 - c_rain.xyz)) * 42.0));
+	#endif
+	/*--------------------------------*/
 
 	
 
-/*--------------------------------*/
-vec3 curr = Uncharted2Tonemap(color);
-vec3 whiteScale = 1.0f / Uncharted2Tonemap(vec3( MAX_COLOR_RANGE));
-color = pow(curr * whiteScale, vec3(1 / 2.2));
-/*--------------------------------*/
-float saturation = 0.98;   
-float avg = (color.r + color.g + color.b);    
-color = (((color - avg) * saturation) + avg) ;
-/*--------------------------------*/
-
-#ifdef VIGNETTE
-	float len = length(texcoord.xy - vec2(.5));
-	float len2 = distratio(texcoord.xy, vec2(.5));
 	/*--------------------------------*/
-	float dc = mix(len, len2, 0.3);
-	float vignette = smStep(VIGNETTE_END, VIGNETTE_START, dc);
+	vec3 curr = Uncharted2Tonemap(color);
+	vec3 whiteScale = 1.0f / Uncharted2Tonemap(vec3(MAX_COLOR_RANGE));
+	color = pow(curr * whiteScale, vec3(1 / 2.2));
 	/*--------------------------------*/
-	color = color * (1 + vignette) * 0.5;
-#endif	
+	float saturation = 0.98;         
+	float avg = (color.r + color.g + color.b);    
+	color = (((color - avg) * saturation) + avg) ;
+	/*--------------------------------*/
 
-gl_FragColor = vec4(color, 1.0);
+	#ifdef VIGNETTE
+		float len = length(texcoord.xy - vec2(.5));
+		float len2 = distratio(texcoord.xy, vec2(.5));
+		/*--------------------------------*/
+		float dc = mix(len, len2, 0.3);
+		float vignette = smStep(VIGNETTE_END, VIGNETTE_START, dc);
+		/*--------------------------------*/
+		color = color * (1 + vignette) * 0.5;
+	#endif	
+
+	gl_FragColor = vec4(color, 1.0);
 }

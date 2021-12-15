@@ -18,7 +18,7 @@ vec4 watercolor = vec4(0.09, 0.7, 0.625, 0.15); 	//water color and opacity (r,g,
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 //////////////////////////////END OF ADJUSTABLE VARIABLES
 
-const float PI                     = 3.1415927;
+const float PI = 3.1415927;
 
 varying vec4 color;
 varying vec2 texcoord;
