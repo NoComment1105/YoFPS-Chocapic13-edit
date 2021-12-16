@@ -360,9 +360,7 @@ void main() {
 	vec3 fogclr = getSkyColor(fragpos.xyz);
 
 
-	float uDepth = texture2D(depthtex0, newTC.xy).x;
-	vec4 t  = (gbufferProjectionInverse * vec4(vec3(newTC.xy, uDepth) * 2.0 - 1.0, 1.0));	
-	vec3 uPos = t.xyz / t.w;
+	vec4 t  = (gbufferProjectionInverse * vec4(vec3(newTC, texture2D(depthtex0, newTC).x) * 2.0 - 1.0, 1.0));	
 	vec3 color = pow(texture2D(gcolor, newTC).rgb, vec3(2.2));
 	color = color * (1.0 + translucent * 0.3);
 
@@ -375,7 +373,7 @@ void main() {
 	vec3 torch_lightmap = (max((1.0 / pow((1 - modlmap) * 16.0, 2.0)) - 0.00390625, 0.0) + handLight) * vec3(TORCH_COLOR_LIGHTING) * eyeAdapt * TORCH_INTENSITY;
 
 
-	float sky_lightmap = pow(max(aux.r - 1.5 / 16., 0.0) * (1 / (1 - 1.5 / 16.)), ATTENUATION);
+	float sky_lightmap = pow(max(aux.r - 1.5 / 16.0, 0.0) * (1 / (1 - 1.5 / 16.0)), ATTENUATION);
 	vec3 skycolor = ambient_color;
 	vec3 lc = mix(pow(sunlight, vec3(2.2)), moonlight, moonVisibility);
 	lc = mix(lc,vec3(length(lc)) * 0.3,rainStrength * 0.9);
@@ -384,7 +382,7 @@ void main() {
 
 	//we'll suppose water plane have same height above pixel and at pixel water's surface
 	
-	vec3 uVec = fragpos.xyz - uPos;
+	vec3 uVec = fragpos.xyz - (t.xyz /= t.w);
 	float UNdotUP = abs(dot(normalize(uVec), normal));
 	float depth = length(uVec) * UNdotUP;
 	float isEyeInWaterFloat = isEyeInWater;  // This is necessary for this due to Mesa being weird and allowing int, but other drivers not
