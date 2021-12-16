@@ -9,7 +9,6 @@ Read the terms of modification and sharing before changing something below pleas
 
 varying vec4 color;
 varying vec4 texcoord;
-varying vec4 lmcoord;
 
 uniform sampler2D texture;
 

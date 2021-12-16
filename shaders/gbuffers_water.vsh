@@ -14,9 +14,7 @@ Read the terms of modification and sharing before changing something below pleas
 varying vec4 color;
 varying vec2 texcoord;
 varying vec2 lmcoord;
-varying vec3 binormal;
 varying vec3 normal;
-varying vec3 tangent;
 varying vec3 wpos;
 varying float iswater;
 

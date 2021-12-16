@@ -23,16 +23,10 @@ const float PI = 3.1415927;
 varying vec4 color;
 varying vec2 texcoord;
 varying vec2 lmcoord;
-varying vec3 binormal;
 varying vec3 normal;
-varying vec3 tangent;
-varying vec3 wpos;
 varying float iswater;
 
 uniform sampler2D texture;
-uniform sampler2D noisetex;
-uniform int worldTime;
-uniform float far;
 uniform float rainStrength;
 uniform float frameTimeCounter;
 uniform vec3 cameraPosition;

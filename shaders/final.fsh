@@ -25,8 +25,6 @@ varying vec3 sunVec;
 varying vec3 moonVec;
 varying vec3 upVec;
 
-varying vec4 lightS;
-
 varying vec3 sunlight;
 varying vec3 moonlight;
 varying vec3 ambient_color;
@@ -39,25 +37,20 @@ varying float MdotU;
 varying float sunVisibility;
 varying float moonVisibility;
 
-uniform sampler2D noisetex;
 uniform sampler2D gnormal;
 uniform sampler2D gcolor;
 uniform sampler2D gaux1;
 uniform sampler2D gaux4;
 uniform sampler2D depthtex0;
 uniform sampler2D depthtex1;
-uniform sampler2D composite;
 
 uniform vec3 cameraPosition;
-uniform vec3 previousCameraPosition;
 uniform vec3 sunPosition;
 uniform vec3 moonPosition;
 uniform mat4 gbufferProjection;
 uniform mat4 gbufferProjectionInverse;
-uniform mat4 gbufferPreviousProjection;
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferModelView;
-uniform mat4 gbufferPreviousModelView;
 uniform ivec2 eyeBrightnessSmooth;
 uniform int isEyeInWater;
 uniform int worldTime;

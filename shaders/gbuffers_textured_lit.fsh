@@ -7,13 +7,9 @@ Read the terms of modification and sharing before changing something below pleas
 !! DO NOT REMOVE !!
 */
 
-const int GL_LINEAR = 9729;
-const int GL_EXP = 2048;
-
 varying vec4 color;
 varying vec4 texcoord;
 varying vec4 lmcoord;
-varying vec3 normal;
 
 uniform sampler2D texture;
 

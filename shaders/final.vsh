@@ -48,7 +48,6 @@ Disable an effect by putting "//" before "#define" when there is no number after
 You can tweak the numbers, the impact on the shaders is self-explained in the variable's name or in a comment
 */
 
-//go to line 46 for changing sunlight color and ambient color line 89 for moon light color
 /*--------------------------------*/
 varying vec4 texcoord;
 
@@ -56,8 +55,6 @@ varying vec3 lightVector;
 varying vec3 sunVec;
 varying vec3 moonVec;
 varying vec3 upVec;
-
-varying vec4 lightS;
 
 varying vec3 sunlight;
 varying vec3 moonlight;
@@ -71,26 +68,16 @@ varying float MdotU;
 varying float sunVisibility;
 varying float moonVisibility;
 
-uniform vec3 skyColor;
 uniform vec3 sunPosition;
 uniform vec3 upPosition;
 uniform int worldTime;
 uniform int heldItemId;
-uniform int heldBlockLightValue;
 uniform int heldItemId2;
-uniform int heldBlockLightValue2;
-uniform int isEyeInWater;
 uniform float rainStrength;
-uniform float wetness;
 uniform ivec2 eyeBrightnessSmooth;
 
-uniform vec3 cameraPosition;
-uniform mat4 gbufferProjection;
-uniform mat4 gbufferProjectionInverse;
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferModelView;
-uniform mat4 shadowProjection;
-uniform mat4 shadowModelView;
 
 /*--------------------------------*/
 ////////////////////sunlight color////////////////////

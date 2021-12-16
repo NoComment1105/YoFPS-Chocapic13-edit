@@ -7,9 +7,6 @@ Read the terms of modification and sharing before changing something below pleas
 !! DO NOT REMOVE !!
 */
 
-const int GL_EXP = 2048;
-const int GL_LINEAR = 9729;
-
 varying vec2 lmcoord;
 varying vec4 color;
 varying float mat;
